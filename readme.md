@@ -27,6 +27,9 @@ https://www.docker.com/get-started/
 
 `docker compose exec php bash`
 
+> **もし docker compose が動かない場合**
+> docker-compose に読み替えて実行してみてください。
+
 #### laravel バージョン 9 の場合
 
 `composer create-project "laravel/laravel=9.*" .`
@@ -63,7 +66,7 @@ npm run build
 
 # ④ laravel のテスト環境を作成
 
-#### テスト用のデータベースを作成  
+#### テスト用のデータベースを作成
 
 [![Image from Gyazo](https://i.gyazo.com/b10def21c9dfe7c0af503ac3671e9988.png)](https://gyazo.com/b10def21c9dfe7c0af503ac3671e9988)
 
@@ -75,13 +78,13 @@ npm run build
 
 #### .env.testing を作成
 
-.envファイルをコピー  
+.env ファイルをコピー
 
 ```
 cp .env .env.testing
 ```
 
-ファイルの作成ができたたら、.env.testingファイルの文頭部分にあるAPP_ENVとAPP_KEYを編集。
+ファイルの作成ができたたら、.env.testing ファイルの文頭部分にある APP_ENV と APP_KEY を編集。
 
 ```
 APP_NAME=Laravel
@@ -93,7 +96,7 @@ APP_DEBUG=true
 APP_URL=http://localhost
 ```
 
-次に、.env.testingにデータベースの接続情報を加える。
+次に、.env.testing にデータベースの接続情報を加える。
 
 ```
   DB_CONNECTION=mysql
@@ -107,7 +110,7 @@ APP_URL=http://localhost
 + DB_PASSWORD=root
 ```
 
-先ほど「空」にしたAPP_KEYに新たなテスト用のアプリケーションキーを加えるために以下のコマンドを実行
+先ほど「空」にした APP_KEY に新たなテスト用のアプリケーションキーを加えるために以下のコマンドを実行
 
 ```
 php artisan key:generate --env=testing
@@ -125,9 +128,9 @@ php artisan config:clear
 php artisan migrate --env=testing
 ```
 
-#### phpunitの編集
+#### phpunit の編集
 
-プロジェクトの直下のphpunit.xmlを開き、DB_CONNECTIONとDB_DATABASEを以下のように変更
+プロジェクトの直下の phpunit.xml を開き、DB_CONNECTION と DB_DATABASE を以下のように変更
 
 ```
     <php>
