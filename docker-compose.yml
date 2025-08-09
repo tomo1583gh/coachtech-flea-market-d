@@ -17,16 +17,15 @@ services:
 
   mysql:
     image: mysql:8.0.26
-    # platform: linux/amd64 # mac の場合は有効にすること
     environment:
       MYSQL_ROOT_PASSWORD: root
       MYSQL_DATABASE: laravel_db
       MYSQL_USER: laravel_user
       MYSQL_PASSWORD: laravel_pass
-    command: mysqld --default-authentication-plugin=mysql_native_password
+    command: ["mysqld","--default-authentication-plugin=mysql_native_password"]
     volumes:
-      - ./docker/mysql/data:/var/lib/mysql
-      - ./docker/mysql/my.cnf:/etc/mysql/conf.d/my.cnf
+      - mysql_data:/var/lib/mysql
+
 
   phpmyadmin:
     image: phpmyadmin/phpmyadmin
@@ -40,3 +39,6 @@ services:
       - mysql
     ports:
       - 8080:80
+
+volumes:
+  mysql_data: {}
