@@ -1,0 +1,711 @@
+/* ヘッダー */
+
+body {
+    margin-top: 70px;
+}
+
+.main-header {
+    padding: 10px 5px;
+    color: white;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    background-color: #000; /* 必要に応じて色を設定 */
+    z-index: 1000; /* 他の要素より前面に出す */
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* 影で浮かせる効果 */
+}
+
+.header-container {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    max-width: 1100px;
+    margin: 0 auto;
+    align-items: center;
+    background-color: transparent;
+}
+
+.logo {
+    height: 30px;
+}
+
+.search-form input[type="text"] {
+    width: 230px;
+    padding: 6px 12px;
+    border-radius: 4px;
+    border: none;
+}
+
+.nav-links a {
+    color: white;
+    margin-left: 10px;
+    text-decoration: none;
+    font-size: 14px;
+}
+
+.nav-links a.btn-sell {
+    color: black;
+    background: white;
+}
+
+.btn-sell {
+    background: white;
+    color: black;
+    padding: 6px 12px;
+    border-radius: 4px;
+    margin-left: 10px;
+    font-weight: bold;
+}
+
+.logo-area a {
+    display: inline-block;
+}
+
+.logo {
+    height: 40px;
+    cursor: pointer;
+}
+
+/* プロフィール設定 */
+.profile-container {
+    max-width: 500px;
+    margin: 80px auto;
+    padding: 20px;
+    text-align: center;
+}
+
+.profile-title {
+    font-size: 20px;
+    font-weight: bold;
+    margin-bottom: 30px;
+}
+
+.profile-image-area {
+    margin-bottom: 30px;
+}
+
+.profile-avatar {
+    width: 120px;
+    height: 120px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 1px solid #ccc;
+}
+
+.image-select-button {
+    display: inline-block;
+    margin-top: 10px;
+    padding: 6px 12px;
+    background-color: #fff0f0;
+    border: 1px solid #ff5c5c;
+    color: #ff5c5c;
+    font-size: 13px;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.form-group {
+    margin-bottom: 20px;
+    text-align: left;
+}
+
+.form-group label {
+    display: block;
+    font-size: 14px;
+    margin-bottom: 6px;
+}
+
+.form-group input {
+    width: 100%;
+    padding: 8px;
+    font-size: 14px;
+    border: 1px solid #aaa;
+    border-radius: 4px;
+}
+
+/* トップ画面 */
+.tab-area {
+    display: flex;
+    border-bottom: 1px solid #ccc;
+    margin: 0 20px 20px;
+}
+
+.tab {
+    padding: 10px 20px;
+    font-size: 14px;
+    color: #999;
+    text-decoration: none;
+}
+
+.tab.active {
+    color: red;
+    font-weight: bold;
+    border-bottom: 2px solid red;
+}
+
+.product-list {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 24px;
+    padding: 20px;
+    max-width: 1000px;
+    margin: 0 auto;
+}
+
+.product-card {
+    text-decoration: none;
+    color: inherit;
+    display: block;
+    max-width: 200px;
+    margin: 0 auto;
+}
+
+.product-image {
+    width: 100%;
+    aspect-ratio: 1 / 1; /* ✅ 正方形にする */
+    object-fit: cover; /* ✅ 中央で切り抜く */
+    background-color: #f0f0f0;
+    border-radius: 4px;
+    margin-bottom: 10px;
+}
+
+.product-name {
+    font-size: 14px;
+    margin-bottom: 5px;
+}
+
+.product-price {
+    font-weight: bold;
+    color: #333;
+}
+
+/* ページネーション部分 */
+.pagination-wrapper {
+    display: flex;
+    justify-content: center;
+    margin-top: 30px;
+}
+
+nav[role="navigation"] {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.pagination {
+    display: flex;
+    list-style: none;
+    padding-left: 0;
+    gap: 10px;
+}
+
+.pagination li {
+    display: inline-block;
+}
+
+.pagination .page-link,
+.pagination .page-item span {
+    display: inline-block;
+    padding: 8px 14px;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    background-color: #fff;
+    color: #333;
+    text-decoration: none;
+    font-weight: bold;
+    transition: background-color 0.2s ease;
+}
+
+.pagination .page-item.active .page-link,
+.pagination .page-item span[aria-current="page"] {
+    background-color: #f0f0f0;
+    color: #000;
+}
+
+.pagination .page-link:hover {
+    background-color: #eee;
+}
+
+/* SOLD機能 */
+.product-card {
+    position: relative;
+    /* SOLD表示を重ねるために必要 */
+    display: block;
+    border: 1px solid #eee;
+    padding: 10px;
+    border-radius: 4px;
+    background-color: #fff;
+    text-decoration: none;
+    color: inherit;
+}
+
+.sold-label {
+    position: absolute;
+    top: 8px;
+    left: 8px;
+    background-color: rgba(255, 0, 0, 0.8);
+    color: white;
+    padding: 4px 8px;
+    font-weight: bold;
+    border-radius: 4px;
+    font-size: 12px;
+    z-index: 10;
+}
+
+.product-card {
+    position: relative;
+    display: block;
+    border: 1px solid #eee;
+    padding: 10px;
+    margin-bottom: 16px;
+    border-radius: 4px;
+    background-color: #fff;
+    text-decoration: none;
+    color: inherit;
+}
+
+.product-image-wrapper {
+    position: relative;
+    width: 100%;
+    height: 200px;
+    overflow: hidden;
+    margin-bottom: 8px;
+}
+
+.product-image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.sold-label {
+    position: absolute;
+    top: 8px;
+    left: 8px;
+    background-color: rgba(255, 0, 0, 0.8);
+    color: white;
+    padding: 4px 8px;
+    font-size: 12px;
+    font-weight: bold;
+    border-radius: 4px;
+    z-index: 1;
+}
+
+.product-name {
+    font-weight: bold;
+    margin-bottom: 4px;
+}
+
+.product-price {
+    color: #333;
+}
+
+/* マイページ */
+.mypage-container {
+    max-width: 1000px;
+    margin: 40px auto;
+    padding: 0 20px;
+}
+
+.mypage-profile {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 20px;
+}
+
+.mypage-avatar {
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;
+    background: #ccc;
+}
+
+.mypage-info h2 {
+    font-size: 18px;
+    font-weight: bold;
+    margin-bottom: 10px;
+}
+
+.edit-profile-btn {
+    background-color: #fff0f0;
+    border: 1px solid #ff5c5c;
+    color: #ff5c5c;
+    padding: 6px 12px;
+    border-radius: 4px;
+    font-size: 13px;
+    text-decoration: none;
+}
+
+.mypage-tabs {
+    display: flex;
+    border-bottom: 1px solid #ccc;
+    margin-bottom: 20px;
+}
+
+.tab {
+    padding: 10px 20px;
+    font-size: 14px;
+    color: #666;
+    text-decoration: none;
+}
+
+.tab.active {
+    color: red;
+    font-weight: bold;
+    border-bottom: 2px solid red;
+}
+
+.no-product-message {
+    text-align: center;
+    padding: 2rem;
+    font-size: 1.1rem;
+    color: #666;
+}
+
+/* 商品出品 */
+.sell-container {
+    max-width: 600px;
+    margin: 40px auto;
+    padding: 0 20px;
+}
+
+.sell-title {
+    font-size: 20px;
+    font-weight: bold;
+    margin-bottom: 30px;
+    text-align: center;
+}
+
+.form-group {
+    margin-bottom: 20px;
+}
+
+.form-group label {
+    font-size: 14px;
+    font-weight: bold;
+    display: block;
+    margin-bottom: 8px;
+}
+
+.upload-input {
+    width: 100%;
+    padding: 10px;
+    border: 1px dashed #ccc;
+    background-color: #fff0f0;
+    border-radius: 4px;
+}
+
+.category-tag {
+    display: inline-block;
+    border: 1px solid #f66;
+    padding: 6px 12px;
+    border-radius: 20px;
+    color: #f66;
+    margin: 5px;
+    cursor: pointer;
+}
+
+.category-tag input {
+    display: none;
+}
+
+.category-tag:has(input:checked) {
+    background-color: #f66;
+    color: white;
+}
+
+select,
+input[type="text"],
+input[type="number"],
+textarea {
+    width: 100%;
+    padding: 10px;
+    font-size: 14px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
+
+textarea {
+    resize: vertical;
+}
+
+/* 商品詳細 */
+.product-detail-container {
+    display: flex;
+    gap: 40px;
+    max-width: 1100px;
+    margin: 40px auto;
+    padding: 0 20px;
+}
+
+.product-image-area {
+    flex: 1;
+    position: relative;
+}
+
+.product-image-show {
+    width: 100%;
+    height: 600px;
+    background-color: #e0e0e0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-weight: bold;
+    border-radius: 4px;
+}
+
+.product-info-area {
+    flex: 1;
+    font-size: 14px;
+}
+
+.product-title {
+    font-size: 20px;
+    font-weight: bold;
+}
+
+.product-brand {
+    margin-bottom: 10px;
+}
+
+.product-price {
+    font-size: 20px;
+    font-weight: bold;
+    margin-bottom: 10px;
+}
+
+.product-price span {
+    font-size: 14px;
+}
+
+.product-actions {
+    margin-bottom: 20px;
+}
+
+.icon-row {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+    font-size: 14px;
+    margin-bottom: 10px;
+}
+
+.icon {
+    font-size: 18px;
+}
+
+.btn-red {
+    display: inline-block;
+    background-color: #ff6f6f;
+    color: white;
+    padding: 10px 24px;
+    font-size: 16px;
+    font-weight: bold;
+    border: none;
+    border-radius: 4px;
+    text-align: center;
+    text-decoration: none;
+    width: 100%;
+}
+
+.product-description,
+.product-meta,
+.product-comments {
+    margin-top: 30px;
+}
+
+.tag {
+    display: inline-block;
+    background: #ffeaea;
+    border: 1px solid #ff5c5c;
+    color: #ff5c5c;
+    padding: 4px 8px;
+    border-radius: 12px;
+    font-size: 12px;
+    margin-right: 4px;
+}
+
+.comment-item {
+    display: flex;
+    align-items: flex-start;
+    margin-bottom: 20px;
+}
+
+.avatar {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    background-color: #ccc;
+    margin-right: 10px;
+}
+
+.comment-body {
+    font-size: 14px;
+}
+
+.comment-text {
+    margin-top: 4px;
+}
+
+.comment-form label {
+    display: block;
+    margin-bottom: 6px;
+    font-weight: bold;
+}
+
+.comment-form textarea {
+    width: 100%;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    padding: 10px;
+    resize: vertical;
+    margin-bottom: 10px;
+}
+
+.like-button {
+    background: none;
+    border: none;
+    font-size: 16px;
+    cursor: pointer;
+    color: #e60023;
+    padding: 0;
+    margin-right: 10px;
+}
+
+.sold-badge {
+    position: absolute;
+    top: 10px;
+    left: 10px;
+    background-color: red;
+    color: white;
+    padding: 6px 12px;
+    font-weight: bold;
+    font-size: 14px;
+    border-radius: 4px;
+    z-index: 10;
+}
+
+/* 購入画面 */
+.purchase-container {
+    display: flex;
+    justify-content: space-between;
+    margin: 40px auto;
+    max-width: 900px;
+    gap: 40px;
+}
+
+.purchase-left,
+.purchase-right {
+    flex: 1;
+}
+
+.product-image {
+    width: 200px;
+    height: 200px;
+    background: #eee;
+    display: block;
+    object-fit: cover;
+}
+
+.product-name {
+    font-size: 20px;
+    margin-top: 10px;
+}
+
+.product-price {
+    font-size: 18px;
+    color: #333;
+    margin-bottom: 20px;
+}
+
+.payment-select {
+    width: 200px;
+    padding: 8px;
+    margin-top: 5px;
+}
+
+.address-section {
+    margin-top: 20px;
+}
+
+.change-address-link {
+    color: #007BFF;
+    text-decoration: none;
+    margin-left: 10px;
+}
+
+.summary-box {
+    border: 1px solid #ccc;
+    padding: 20px;
+    margin-bottom: 20px;
+}
+
+.summary-box p {
+    display: flex;
+    justify-content: space-between;
+    margin: 10px 0;
+}
+
+.btn-purchase {
+    background-color: #ff6b6b;
+    color: white;
+    border: none;
+    padding: 12px 30px;
+    font-size: 16px;
+    cursor: pointer;
+    border-radius: 4px;
+}
+
+/* バリデーション */
+.error {
+    color: red;
+    font-size: 14px;
+    margin-top: 4px;
+}
+
+/* 住所変更 */
+.address-edit-container {
+    max-width: 600px;
+    margin: 50px auto;
+    text-align: center;
+}
+
+.form-title {
+    font-size: 24px;
+    margin-bottom: 30px;
+}
+
+.address-form {
+    text-align: left;
+}
+
+.form-group {
+    margin-bottom: 20px;
+}
+
+.form-group label {
+    display: block;
+    font-weight: bold;
+    margin-bottom: 5px;
+}
+
+.form-group input {
+    width: 100%;
+    padding: 10px;
+    font-size: 16px;
+}
+
+.btn-submit {
+    display: block;
+    width: 100%;
+    background-color: #ff6b6b;
+    color: white;
+    border: none;
+    padding: 12px;
+    font-size: 16px;
+    cursor: pointer;
+    border-radius: 4px;
+}
+
