@@ -18,9 +18,12 @@
 
 1. リポジトリのクローン
 
-    `git clone git@github.com:tomo1583gh/coachtech-flea-market.git`
+    `git clone https://github.com:tomo1583gh/coachtech-flea-market.git`
 
-2. Dockerコンテナのビルド・起動
+2. 階層を変更
+　　`cd coachtech-flea-market`
+
+3. Dockerコンテナのビルド・起動
 
     `docker-compose up -d --build`
 
