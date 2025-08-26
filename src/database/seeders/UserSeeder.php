@@ -19,6 +19,10 @@ class UserSeeder extends Seeder
                 'email' => 'test@example.com',
                 'password' => Hash::make('password'),
                 'email_verified_at' => now(),
+                'image_path' => 'avatar/sample.png',
+                'zip' => '123-4567',
+                'address' => '静岡県静岡市葵区1-1-1',
+                'building' => '静岡ハイツ201',
             ]);
         }
     }
