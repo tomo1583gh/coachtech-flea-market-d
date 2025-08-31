@@ -17,6 +17,8 @@ services:
     depends_on:
       - mysql
       - mailhog
+    environment:
+      - COMPOSER_ALLOW_SUPERUSER=1 
 
   mysql:
     image: mysql:8.0.26
