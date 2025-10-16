@@ -1,14 +1,20 @@
-FROM php:7.4-fpm-bullseye
+FROM php:8.2-fpm
 
 COPY php.ini /usr/local/etc/php/
 
-RUN apt update \
-  && apt install -y default-mysql-client zlib1g-dev libzip-dev unzip \
-  && docker-php-ext-install pdo_mysql zip bcmath
+RUN apt-get update \
+  && apt-get install -y \
+    default-mysql-client \
+    zlib1g-dev \ libzip-dev \
+    libonig-dev \
+    unzip \
+  && rm -rf /var/lib/apt/lists/*
+  
+# 必要拡張 
+RUN docker-php-ext-install pdo_mysql zip mbstring
 
-RUN curl -sS https://getcomposer.org/installer | php \
-  && mv composer.phar /usr/local/bin/composer \
-  && composer self-update
+# composerは公式からコピー 
+COPY --from=composer:2 /usr/bin/composer /usr/bin/composer 
 
 WORKDIR /var/www
 
