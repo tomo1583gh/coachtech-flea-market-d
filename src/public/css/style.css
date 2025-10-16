@@ -11,7 +11,7 @@ body {
     top: 0;
     left: 0;
     width: 100%;
-    background-color: #000; /* 必要に応じて色を設定 */
+    background-color: #000;
     z-index: 1000; /* 他の要素より前面に出す */
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* 影で浮かせる効果 */
 }
