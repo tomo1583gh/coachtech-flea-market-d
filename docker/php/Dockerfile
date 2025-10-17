@@ -1,25 +1,28 @@
 FROM php:8.2-fpm
 
+# -------- PHP 拡張など --------
 COPY php.ini /usr/local/etc/php/
 
-RUN apt-get update \
-  && apt-get install -y \
-    default-mysql-client \
-    zlib1g-dev \ libzip-dev \
-    libonig-dev \
-    unzip \
-  && rm -rf /var/lib/apt/lists/*
-  
-# 必要拡張 
-RUN docker-php-ext-install pdo_mysql zip mbstring
+RUN apt update \
+  && apt install -y default-mysql-client zlib1g-dev libzip-dev unzip \
+  && docker-php-ext-install pdo_mysql zip bcmath
 
-# composerは公式からコピー 
-COPY --from=composer:2 /usr/bin/composer /usr/bin/composer 
+# -------- Composer --------
+RUN curl -sS https://getcomposer.org/installer | php \
+  && mv composer.phar /usr/local/bin/composer \
+  && composer self-update
+
+# -------- ホストの UID/GID でユーザーを作る --------
+ARG UID=1000
+ARG GID=1000
+RUN groupadd -g ${GID} app && useradd -ms /bin/bash -u ${UID} -g ${GID} app
 
 WORKDIR /var/www
 
-# UID=1000 のユーザー tomo を作成
-RUN useradd -m -u 1000 -s /bin/bash tomo
+# vendor/.composer キャッシュ等の書き込み権限
+ENV COMPOSER_HOME=/var/www/.composer
+RUN mkdir -p ${COMPOSER_HOME} \
+  && chown -R ${UID}:${GID} /var/www
 
-# 以降を tomo ユーザーで実行
-USER tomo
+USER app
+WORKDIR /var/www
