@@ -21,7 +21,7 @@
     `git clone https://github.com/tomo1583gh/coachtech-flea-market-d.git`
 
 2. 階層を変更
-　　`cd coachtech-flea-market`
+　　`cd coachtech-flea-market-d`
 
 3. Dockerコンテナのビルド・起動
 
