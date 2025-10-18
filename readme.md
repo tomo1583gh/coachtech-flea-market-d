@@ -18,7 +18,7 @@
 
 1. リポジトリのクローン
 
-    `git clone https://github.com/tomo1583gh/coachtech-flea-market.git`
+    `git clone https://github.com/tomo1583gh/coachtech-flea-market-d.git`
 
 2. 階層を変更
 　　`cd coachtech-flea-market`
