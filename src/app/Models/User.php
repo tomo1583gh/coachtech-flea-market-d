@@ -65,7 +65,6 @@ class User extends Authenticatable implements MustVerifyEmail
     {
         return ! empty($this->name)
             && ! empty($this->zip)
-            && ! empty($this->address)
-            && ! empty($this->building);
+            && ! empty($this->address);
     }
 }

@@ -18,16 +18,16 @@
         <div class="form-group">
             <label for="address">住所</label>
             <input type="text" id="address" name="address" value="{{ old('address', $user->address) }}">
-            @if ($errors->has('address'))
-            <p class="error">{{ $errors->first('address') }}</p>
+            @error ('address')
+            <p class="error">{('address') }</p>
             @enderror
         </div>
 
         <div class="form-group">
             <label for="building">建物名</label>
             <input type="text" id="building" name="building" value="{{ old('building', $user->building) }}">
-            @if ($errors->has('building'))
-            <p class="error">{{ $errors->first('building') }}</p>
+            @error ('building')
+            <p class="error">{('building') }</p>
             @enderror
         </div>
 

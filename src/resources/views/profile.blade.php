@@ -8,7 +8,7 @@
         @csrf
 
         <div class="profile-image-area">
-            <img src="{{ asset('storage/' . $user->image_path) }}" class="mypage-avatar" alt="プロフィール画像">
+            <img src="{{ $user->image_path ? asset('storage/' . $user->image_path) : asset('images/default-avatar.png') }}" class="mypage-avatar" alt="プロフィール画像">
             <label class="image-select-button">
                 画像を選択する
                 <input type="file" name="image" style="display: none;">

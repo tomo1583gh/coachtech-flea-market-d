@@ -4,8 +4,28 @@ FROM php:8.2-fpm
 COPY php.ini /usr/local/etc/php/
 
 RUN apt update \
-  && apt install -y default-mysql-client zlib1g-dev libzip-dev unzip \
-  && docker-php-ext-install pdo_mysql zip bcmath
+  && apt install -y \
+  default-mysql-client \
+  zlib1g-dev \
+  libzip-dev \
+  unzip \
+  libfreetype6-dev \
+  libjpeg62-turbo-dev \
+  libpng-dev \
+  libwebp-dev \
+  # gd の設定
+  && docker-php-ext-configure gd \
+  --with-freetype \
+  --with-jpeg \
+  --with-webp \
+  # PHP拡張インストール
+  && docker-php-ext-install \
+  pdo_mysql \
+  zip \
+  bcmath \
+  gd \
+  && apt clean \
+  && rm -rf /var/lib/apt/lists/*
 
 # -------- Composer --------
 RUN curl -sS https://getcomposer.org/installer | php \

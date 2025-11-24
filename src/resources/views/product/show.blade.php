@@ -35,7 +35,7 @@ $stateLabels = [
                     @csrf
                     <button type="submit" class="like-button {{ $isFavorited ? 'favorite' : '' }}">
                         {{ $isFavorited ? '❤️' : '🤍' }}
-                        <span>{{ optional($product->likedUsers)->count() ?? 0 }}</span>
+                        <span>{{ $product->likedUsers->count() }}</span>
                     </button>
                 </form>
                 @else

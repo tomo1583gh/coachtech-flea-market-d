@@ -67,7 +67,6 @@ Route::middleware(['auth', 'verified'])->group(function () {
     // 商品購入 (追加)
     Route::get('/purchase/{item_id}', [PurchaseController::class, 'show'])->name('purchase.show');
     Route::post('/purchase/{item_id}', [PurchaseController::class, 'store'])->name('purchase.complete');
-    Route::post('/purchase/address/{item_id}', [PurchaseController::class, 'updateAddress'])->name('purchase.address.update');
 
     // 送付先住所変更ページ
     Route::get('/purchase/address/{item_id}', [PurchaseController::class, 'editAddress'])->name('purchase.address.edit');

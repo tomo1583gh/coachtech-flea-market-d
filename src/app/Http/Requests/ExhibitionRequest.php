@@ -27,7 +27,7 @@ class ExhibitionRequest extends FormRequest
             'brand' => ['nullable', 'string', 'max:255'],
             'description' => ['required', 'string', 'max:1000'],
             'price' => ['required', 'integer', 'min:0'],
-            'state' => ['required', Rule::in(['new', 'like_new', 'good', 'fair', 'poor'])],
+            'state' => ['required', Rule::in(['new', 'good', 'fair', 'poor'])],
             'category_ids' => ['required', 'array', 'min:1'],
             'category_ids.*' => ['exists:categories,id'],
             'image' => ['required', 'image', 'mimes:jpeg,png,jpg', 'max:2048'],
