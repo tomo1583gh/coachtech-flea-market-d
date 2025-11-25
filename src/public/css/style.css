@@ -340,8 +340,28 @@ nav[role="navigation"] {
 
 .mypage-tabs {
     display: flex;
-    border-bottom: 1px solid #ccc;
-    margin-bottom: 20px;
+    gap: 24px;
+    border-bottom: 1px solid #eee;
+    margin: 24px;
+}
+
+.mypage-tab {
+    display: inline-block;
+    padding: 8px 16px;
+    font-size: 14px;
+    color: #555;
+    text-decoration: none;
+    border-bottom: 3px solid transparent;
+}
+
+.mypage-tab:hover {
+    color: #000;
+}
+
+.mypage-tab.is-active {
+    color: #000;
+    font-weight: bold;
+    border-bottom-color: #000;
 }
 
 .tab {
@@ -709,3 +729,335 @@ textarea {
     border-radius: 4px;
 }
 
+/* ==============================
+    取引チャット
+   ============================ */
+
+.chat-container {
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 24px 16px;
+}
+
+.chat-title {
+    font-size: 24px;
+    font-weight: bold;
+    margin-bottom: 16px;
+}
+
+/* 商品取引カード */
+.chat-product-card {
+    background-color: #fff;
+    border-radius: 8px;
+    padding: 16px;
+    margin-bottom: 16px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.04);
+}
+
+.chat-product-name {
+    font-size: 18px;
+    margin-bottom: 8px;
+}
+
+.chat-product-image {
+    width: 200px;
+    max-width: 100%;
+    border-radius: 8px;
+    display: block;
+}
+
+.chat-product-seller {
+    margin-top: 8px;
+    font-size: 14px;
+    color: #555;
+}
+
+/* メッセージ一覧 */
+.chat-messages {
+    background-color: #fff;
+    border-radius: 8px;
+    padding: 16px;
+    margin-bottom: 16px;
+    height: 400px;
+    overflow-y: auto;
+}
+
+.chat-message {
+    margin-bottom: 12px;
+    padding-bottom: 12px;
+    border-bottom: 1px solid #eee;
+}
+
+.chat-message:last-child {
+    border-bottom: none;
+}
+
+/* 自分と相手で背景を分ける仕様（任意） */
+.chat-message--me {
+    background-color: #f3f8ff;
+    border-radius: 6px;
+    padding: 8px;
+}
+
+.chat-message--other {
+    padding: 8px;
+}
+
+.chat-message-header {
+    display: flex;
+    justify-content: space-between;
+    font-size: 12px;
+    color: #777;
+    margin-bottom: 4px;
+}
+
+.chat-message-body {
+    font-size: 14px;
+    margin-bottom: 4px;
+}
+
+.chat-message-image {
+    max-width: 200px;
+    border-radius: 6px;
+    display: block;
+    margin-top: 4px;
+}
+
+.chat-message-empty {
+    color: #777;
+    font-size: 14px;
+}
+
+/* フォーム */
+.chat-form-card {
+    background-color: #fff;
+    border-radius: 8px;
+    padding: 16px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.04);
+    margin-bottom: 24px;
+}
+
+.chat-form-group {
+    margin-bottom: 12px;
+}
+
+.chat-form-label {
+    display: block;
+    font-size: 14px;
+    font-weight: bold;
+    margin-bottom: 4px;
+}
+
+.chat-form-textarea {
+    width: 100%;
+    min-height: 80px;
+    padding: 8px;
+    font-size: 14px;
+    border-radius: 4px;
+    border: 1px solid #ccc;
+}
+
+.chat-form-file {
+    display: block;
+    margin-top: 4px;
+}
+
+.chat-form-actions {
+    text-align: right;
+}
+
+.chat-submit-button {
+    background-color: #333;
+    color: #fff;
+    border: none;
+    padding: 8px 16px;
+    border-radius: 4px;
+    font-size: 14px;
+    cursor: pointer;
+}
+
+.chat-submit-button:hover {
+    opacity: 0.9;
+}
+
+.chat-error {
+    color: #e53935;
+    font-size: 13px;
+    margin-top: 4px;
+}
+
+/* =========================
+    取引チャット：メッセージ
+   ========================= */
+
+.chat-messages {
+    background-color: #fff;
+    border-radius: 8px;
+    padding: 16px;
+    margin-bottom: 16px;
+    height: 400px;
+    overflow: auto;
+}
+
+.chat-message-row {
+    display: flex;
+    margin-bottom: 12px;
+}
+
+/* 自分のメッセージは右寄せ */
+.chat-message-row--me {
+    justify-content: flex-end;
+}
+
+/* 相手のメッセージは左寄せ */
+.chat-message-row--other {
+    justify-content: flex-start;
+}
+
+.chat-message {
+    max-width: 70%;
+    padding: 8px 12px;
+    border-radius: 12px;
+    font-size: 14px;
+}
+
+/* 自分の吹き出し */
+.chat-message--me {
+    background-color: #f3f8ff;
+}
+
+/* 相手の吹き出し */
+.chat-message-other {
+    background-color: #f7f7f7;
+}
+
+.chat-message-header {
+    display: flex;
+    justify-content: space-between;
+    font-size: 11px;
+    color: #777;
+    margin-bottom: 4px;
+}
+
+.chat-message-body {
+    font-size: 14px;
+    margin-bottom: 4px;
+    word-break: break-all;
+}
+
+.chat-message-image {
+    max-width: 160px;
+    border-radius: 6px;
+    display: block;
+    margin-top: 4px;
+}
+
+/* 編集・削除部分 */
+.chat-message-action {
+    display: flex;
+    gap: 8px;
+    margin-top: 6px;
+}
+
+.chat-message-edit-textarea {
+    width: 100%;
+    margin-bottom: 4px;
+    font-size: 13px;
+}
+
+.chat-edit-button,
+.chat-delete-button {
+    border: none;
+    padding: 4px 8px;
+    font-size: 12px;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.chat-edit-button {
+    background-color: #4caf50;
+    color: #fff;
+}
+
+.chat-delete-button {
+    background-color: #e53935;
+    color: #fff;
+}
+
+/* =========================
+　　取引チャット レイアウト
+   ========================= */
+
+.chat-layout {
+    display: flex;
+    gap: 24px;
+    align-items: flex-start;
+}
+
+/* サイドバー */
+.chat-sidebar {
+    width: 260px;
+    max-height: 600px;
+    overflow-y: auto;
+    background-color: #fff;
+    border-radius: 8px;
+    padding: 12px;
+}
+
+.chat-sidebar-title {
+    font-size: 14px;
+    font-weight: bold;
+    margin-bottom: 8px;
+}
+
+.chat-sidebar-item {
+    display: flex;
+    gap: 8px;
+    padding: 8px;
+    border-radius: 6px;
+    text-decoration: none;
+    color: #333;
+    margin-bottom: 6px;
+    border: 1px solid transparent;
+}
+
+.chat-sidebar-item:hover {
+    background-color: #f7f7f7;
+}
+
+/* 現在表示中の商品 */
+.chat-sidebar-item.is-active {
+    border-color: #333;
+    background-color: #fafafa;
+}
+
+.chat-sidebar-thumb img {
+    width: 48px;
+    height: 48px;
+    object-fit: cover;
+    border-radius: 4px;
+}
+
+.chat-sidebar-info {
+    flex: 1;
+}
+
+.chat-sidebar-name {
+    font-size: 13px;
+    margin-bottom: 2px;
+}
+
+.chat-sidebar-meta {
+    font-size: 11px;
+    color: #777;
+}
+
+.chat-sidebar-empty {
+    font-size: 12px;
+    color: #777;
+}
+
+/* メイン側 */
+.chat-main {
+    flex: 1;
+}

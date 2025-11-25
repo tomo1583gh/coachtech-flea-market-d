@@ -8,6 +8,7 @@ use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\PurchaseController;
 use App\Http\Controllers\RedirectController;
 use App\Http\Controllers\TopController;
+use App\Http\Controllers\TradeChatController;
 use Illuminate\Foundation\Auth\EmailVerificationRequest;
 use Illuminate\Support\Facades\Route;
 
@@ -71,6 +72,22 @@ Route::middleware(['auth', 'verified'])->group(function () {
     // 送付先住所変更ページ
     Route::get('/purchase/address/{item_id}', [PurchaseController::class, 'editAddress'])->name('purchase.address.edit');
     Route::post('/purchase/address/{item_id}', [PurchaseController::class, 'updateAddress'])->name('purchase.address.update');
+
+    // 取引チャット画面表示
+    Route::get('/trades/{product}', [TradeChatController::class, 'show'])
+        ->name('trade.chat.show');
+
+    // メッセージ投稿
+    Route::post('/trades/{product}/message', [TradeChatController::class, 'store'])
+        ->name('trade.message.store');
+
+    // メッセージ編集
+    Route::patch('/trades/{product}/messages/{message}', [TradeChatController::class,'update'])
+        ->name('trade.message.update');
+
+    // メッセージ削除
+    Route::delete('/trades/{product}/messages/{message}', [TradeChatController::class, 'destroy'])
+        ->name('trade.message.destroy');
 
     // いいね機能
     Route::post('/item/{item_id}/favorite', [FavoriteController::class, 'toggle'])->name('favorite.toggle');

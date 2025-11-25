@@ -67,4 +67,9 @@ class User extends Authenticatable implements MustVerifyEmail
             && ! empty($this->zip)
             && ! empty($this->address);
     }
+
+    public function tradeMessage()
+    {
+        return $this->hasMany(TradeMessage::class);
+    }
 }

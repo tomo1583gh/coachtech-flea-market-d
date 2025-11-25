@@ -49,4 +49,9 @@ class Product extends Model
     {
         return $this->belongsToMany(User::class, 'favorite_product', 'product_id', 'user_id')->withTimestamps();
     }
+
+    public function tradeMessages()
+    {
+        return $this->hasMany(TradeMessage::class);
+    }
 }
