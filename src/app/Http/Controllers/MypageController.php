@@ -15,36 +15,64 @@ class MypageController extends Controller
     {
         $user = Auth::user();
 
-        // クエリパラメータ ?page=xxx （デフォルトは 'sell'）
-        $page = $request->query('page', 'sell');
+        // ★ ユーザー評価（0～5想定）
+        // usersテーブルに rating カラムがある場合：その値を使う
+        // カラムが無ければ null → 0 になるのでそのままOK
+        $rating = (int) ($user->rating ?? 0);
+        if ($rating < 0) $rating = 0;
+        if ($rating > 5) $rating = 5;
 
+        // ?page=xxx （デフォルトは 'sell'）
+        $page = $request->query('page', 'sell');
+        
+        // ------------------------------------------
+        // ①取引中商品のベースクエリ（タブ横バッジ用）
+        // ------------------------------------------
+        $tradingBaseQuery = Product::query()
+            ->where(function ($q) use ($user) {
+                $q->where('user_id', $user->id)
+                    ->orWhere('buyer_id', $user->id);
+            })
+
+            // ★ 未読メッセージ件数をカウントする
+            ->withCount([
+                'tradeMessages as unread_message_count' => function ($q) use ($user) {
+                    $q->where('is_read', false)
+                        ->where('user_id', '!=', $user->id); // 自分以外からのメッセージのみ
+                },
+            ]);
+
+        // ★ タブ横に出す「合計未読件数」
+        $totalUnread = (clone $tradingBaseQuery)->get()->sum('unread_message_count');
+
+        // ------------------------------------
+        // ②実際に表示するタブごとのクエリ
+        // ------------------------------------
         $query = Product::query();
 
         if ($page === 'buy') {
             // 購入した商品タブ
-            $query->where('buyer_id', $user->id);
-        } elseif ($page === 'trading') {
-            // 取引中の商品タブ
-            // 自分が出品者 or 購入者になっている商品を取得
-            $query->where(function ($q) use ($user) {
-                $q->where('user_id', $user->id)
-                    ->orWhere('buyer_id', $user->id);
-            });
+            $query->where('buyer_id', $user->id)
+                ->orderBy('created_at', 'desc');
 
-            // 将来的に trade_status カラムを作ったらここで絞り込み
-            // ->where('trade_status', 'trading');
+        } elseif ($page === 'trading') {
+            // 取引中の商品タブ：さっきのベースクエリをそのまま利用
+            $query = $tradingBaseQuery->orderBy('updated_at', 'desc');
 
         } else {
             // 出品した商品タブ（デフォルト）
-            $query->where('user_id', $user->id);
+            $query->where('user_id', $user->id)
+                ->orderBy('created_at', 'desc');
         }
 
         $products = $query->paginate(8);
 
         return view('mypage', [
-            'user'     => $user,
-            'products' => $products,
-            'page'     => $page,
+            'user'        => $user,
+            'products'    => $products,
+            'page'        => $page,
+            'totalUnread' => $totalUnread,
+            'rating'      => $rating,
         ]);
     }
 }

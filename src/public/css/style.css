@@ -131,13 +131,6 @@ body {
     margin: 0 20px 20px;
 }
 
-.tab {
-    padding: 10px 20px;
-    font-size: 14px;
-    color: #999;
-    text-decoration: none;
-}
-
 .tab.active {
     color: red;
     font-weight: bold;
@@ -151,28 +144,6 @@ body {
     padding: 20px;
     max-width: 1000px;
     margin: 0 auto;
-}
-
-.product-card {
-    text-decoration: none;
-    color: inherit;
-    display: block;
-    max-width: 200px;
-    margin: 0 auto;
-}
-
-.product-image {
-    width: 100%;
-    aspect-ratio: 1 / 1; /* ✅ 正方形にする */
-    object-fit: cover; /* ✅ 中央で切り抜く */
-    background-color: #f0f0f0;
-    border-radius: 4px;
-    margin-bottom: 10px;
-}
-
-.product-name {
-    font-size: 14px;
-    margin-bottom: 5px;
 }
 
 .product-price {
@@ -230,31 +201,6 @@ nav[role="navigation"] {
 /* SOLD機能 */
 .product-card {
     position: relative;
-    /* SOLD表示を重ねるために必要 */
-    display: block;
-    border: 1px solid #eee;
-    padding: 10px;
-    border-radius: 4px;
-    background-color: #fff;
-    text-decoration: none;
-    color: inherit;
-}
-
-.sold-label {
-    position: absolute;
-    top: 8px;
-    left: 8px;
-    background-color: rgba(255, 0, 0, 0.8);
-    color: white;
-    padding: 4px 8px;
-    font-weight: bold;
-    border-radius: 4px;
-    font-size: 12px;
-    z-index: 10;
-}
-
-.product-card {
-    position: relative;
     display: block;
     border: 1px solid #eee;
     padding: 10px;
@@ -263,33 +209,24 @@ nav[role="navigation"] {
     background-color: #fff;
     text-decoration: none;
     color: inherit;
-}
-
-.product-image-wrapper {
-    position: relative;
-    width: 100%;
-    height: 200px;
-    overflow: hidden;
-    margin-bottom: 8px;
-}
-
-.product-image {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
+    width: 260px;
 }
 
 .sold-label {
     position: absolute;
     top: 8px;
-    left: 8px;
-    background-color: rgba(255, 0, 0, 0.8);
-    color: white;
-    padding: 4px 8px;
-    font-size: 12px;
-    font-weight: bold;
-    border-radius: 4px;
-    z-index: 1;
+    right: 8px;
+    background: #e60023;
+    color: #fff;
+    padding: 2px 6px;
+    font-size: 11px;
+    border-radius: 3px;
+}
+
+.sold-label--right {
+    top: 8px;
+    right: 8px;
+    left: auto;
 }
 
 .product-name {
@@ -308,18 +245,75 @@ nav[role="navigation"] {
     padding: 0 20px;
 }
 
-.mypage-profile {
+.mypage-header {
     display: flex;
     align-items: center;
     justify-content: space-between;
+    max-width: 980px;
+    margin: 40px auto 30px;
+}
+
+.mypage-header-left {
+    display: flex;
+    align-items: center;
+    gap: 24px;
+}
+
+.mypage-profile {
+    display: flex;
+    align-items: center;
     margin-bottom: 20px;
+}
+
+.mypage-profile-main {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+}
+
+.mypage-profile-header {
+    display: flex;
+    align-items: center;
+}
+
+.mypage-profile-text {
+    margin-left: 24px;
+}
+
+.mypage-profile-button {
+    padding: 10px 24px;
+    border: 1px solid #ff4e50;
+    border-radius: 4px;
+    color: #ff4e50;
+    font-weight: bold;
+    text-decoration: none;
 }
 
 .mypage-avatar {
     width: 100px;
-    height: 100px;
+    height: 110px;
     border-radius: 50%;
-    background: #ccc;
+    object-fit: cover;
+    margin-right: 24px;
+    /* background: #ccc; */
+}
+
+.mypage-avatar img {
+    width: 120px;
+    height: 120px;
+    border-radius: 50px;
+    object-fit: cover;
+}
+
+.mypage-username {
+    font-size: 24px;
+    font-weight: bold;
+}
+
+.mypage-user-text {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
 }
 
 .mypage-info h2 {
@@ -337,21 +331,29 @@ nav[role="navigation"] {
     font-size: 13px;
     text-decoration: none;
 }
-
+/* タブ */
 .mypage-tabs {
+    max-width: 980px;
+    margin: 0 auto 24px;
     display: flex;
-    gap: 24px;
-    border-bottom: 1px solid #eee;
-    margin: 24px;
+    gap: 40px;
+    border-bottom: 1px solid #ccc;
 }
 
 .mypage-tab {
-    display: inline-block;
-    padding: 8px 16px;
-    font-size: 14px;
+    position: relative;
+    padding: 8px;
+    font-size: 16px;
     color: #555;
     text-decoration: none;
-    border-bottom: 3px solid transparent;
+}
+
+.mypage-tab a {
+    display: inline-block;
+    padding: 8px 0;
+    color: #777;
+    text-decoration: none;
+    position: relative;
 }
 
 .mypage-tab:hover {
@@ -359,9 +361,24 @@ nav[role="navigation"] {
 }
 
 .mypage-tab.is-active {
-    color: #000;
-    font-weight: bold;
-    border-bottom-color: #000;
+    color: #e60023;;
+    border-bottom: 2px solid #e60023;
+    border-bottom: none;
+}
+
+/* タブ横の合計未読件数バッジ */
+.mypage-tab-unread-badge {
+    display: inline-block;
+    margin-left: 4px;
+    min-width: 18px;
+    height: 18px;
+    padding: 0 6px;
+    border-radius: 999px;
+    background: #e60023;
+    color: #fff;
+    font-size: 11px;
+    line-height: 18px;
+    text-align: center;
 }
 
 .tab {
@@ -382,6 +399,66 @@ nav[role="navigation"] {
     padding: 2rem;
     font-size: 1.1rem;
     color: #666;
+}
+
+/* 星評価 */
+.mypage-rating {
+    font-size: 18px;
+}
+
+.rating-star {
+    color: #ddd;
+    margin-right: 4px;
+}
+
+.rating-star--on {
+    color: #ffd700;
+}
+
+.rating-star--off {
+    color: #ddd;
+}
+
+.rating-star.is-active {
+    color: #ffd700;
+}
+
+.rating-star--filled {
+    color: #ffcc00;
+}
+
+/* タブの未読バッジ */
+.tab-unread-badge {
+    display: inline-block;
+    margin-left: 4px;
+    min-width: 18px;
+    padding: 1px 5px;
+    border-radius: 999px;
+    background-color: #ff4e50;
+    color: #fff;
+    font-size: 11px;
+    line-height: 1.4;
+    text-align: center;
+}
+
+/* 商品カードの未読バッジ */
+
+.product-image-wrapper {
+    position: relative;
+    width: 100%;
+}
+
+.product-unread-badge {
+    position: absolute;
+    top: 8px;
+    left: 8px;
+    min-width: 16px;
+    padding: 1px 4px;
+    border-radius: 999px;
+    background-color: #ff4e50;
+    color: #fff;
+    font-size: 10px;
+    text-align: center;
 }
 
 /* 商品出品 */
@@ -1061,3 +1138,6 @@ textarea {
 .chat-main {
     flex: 1;
 }
+
+
+

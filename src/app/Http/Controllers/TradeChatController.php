@@ -25,18 +25,23 @@ class TradeChatController extends Controller
             abort(403);
         }
 
+        // ★ この時点で「自分以外からの未読メッセージ」を既読にする
+        $product->tradeMessages()
+            ->where('user_id', '!=', $user->id)
+            ->where('is_read', false)
+            ->update(['is_read' => true]);
+
         // サイドバー用：ログインユーザーが関わっている「取引中の商品一覧」
-        // trade_status カラムをあとで追加する場合を想定した例
         $tradingProducts = Product::query()
             ->where(function ($query) use ($user) {
                 $query->where('user_id', $user->id)
                     ->orWhere('buyer_id', $user->id);
             })
-            // 取引中フラグを導入したらコメントアウトを外す
+            // 将来的に trade_status カラムを作ったらここで絞り込み
             // ->where('trade_status', 'trading')
-            ->withCount('tradeMessages') // メッセージ数（バッジ表などに利用可能）
+            ->withCount('tradeMessages')
             ->orderBy('updated_at', 'desc')
-            ->get(); 
+            ->get();
 
         // 対象商品のメッセージ一覧（古い順）
         $messages = $product->tradeMessages()
