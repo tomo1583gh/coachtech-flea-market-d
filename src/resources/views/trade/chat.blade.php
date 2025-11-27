@@ -1,141 +1,196 @@
 @extends('layouts.app')
 
 @section('content')
+@php
+    // ログインユーザーが出品者かどうか
+    $isSeller = $product->user_id === $user->id;
+    // 取引相手（出品者なら buyer / 購入者なら user）
+    $partner = $isSeller ? $product->buyer : $product->user;
+@endphp
+
 <div class="chat-container">
-    <h2 class="chat-title">取引チャット</h2>
 
-    <div class="chat-layout">
-      {{-- ★ サイドバー（取引中の商品一覧） --}}
-      <aside class="chat-sidebar">
-        <h3 class="chat-sidebar-title">取引中の商品</h3>
+  <div class="chat-layout">
+    {{-- =========================
+          左：その他の取引 （サイドバー）
+        =========================== --}}
+      <aside class="chat-sidebar {{ $isSeller ? 'chat-sidebar--seller' : 'chat-sidebar--buyer' }}">
+        <p class="chat-sidebar-heading">その他の取引</p>
 
-        @forelse ($tradingProducts as $tradeProduct)
+        {{-- 出品者のときだけ、取引中の商品リストを表示 --}}
+        @if ($isSeller)
+          @forelse ($tradingProducts as $tradeProduct)
             <a href="{{ route('trade.chat.show', ['product' => $tradeProduct->id]) }}"
-                class="chat-sidebar-item {{ $tradeProduct->id === $product->id ? 'is-active' : ''}}">
-                <div class="chat-sidebar-thumb">
-                  <img src="{{ asset('storage/' . $tradeProduct->image_path) }}"
-                      alt="{{ $tradeProduct->name }}">
-                </div>
-                <div class="chat-sidebar-info">
-                    <p class="chat-sidebar-name">{{ $tradeProduct->name }}</p>
-                    <p class="chat-sidebar-meta">
-                        メッセージ {{ $tradeProduct->trade_message_count }} 件
-                    </p>
-                </div>
+              class="chat-sidebar-item {{ $tradeProduct->id === $product->id ? 'is-active' : '' }}">
+              <div class="chat-sidebar-thumb">
+                <img src="{{ asset('storage/' . $tradeProduct->image_path) }}"
+                  alt="{{ $tradeProduct->name }}">
+
+              </div>
+              <div class="chat-sidebar-info">
+                <p class="chat-sidebar-name">{{ $tradeProduct->name }}</p>
+                <p class="chat-sidebar-meta">
+                  メッセージ {{ $tradeProduct->trade_message_count }} 件
+                </p>
+              </div>
             </a>
           @empty
               <p class="chat-sidebar-empty">取引中の商品はありません。</p>
           @endforelse
+        @endif
       </aside>
 
-      {{-- ★ メイン --}}
+      {{-- =================
+          右：メインエリア
+          =================  --}}
       <div class="chat-main">
-    
-          {{-- 商品情報 --}}
-          <div class="chat-product-card">
-              <h3 class="chat-product-name">{{ $product->name }}</h3>
-              <img src="{{ asset('storage/' . $product->image_path) }}"
-                  alt="商品画像"
-                  class="chat-product-image">
-              <p class="chat-product-seller">
-                  出品者：{{ optional($product->user)->name ?? '出品者情報がありません' }}
-              </p>
+
+        {{-- 取引ヘッダー：「○○さんとの取引画面」＋　取引を完了する ボタン --}}
+        <div class="chat-header">
+          <div class="chat-header-left">
+            <div class="chat-header-avatar"></div>
+            <p class="chat-header-title">
+              「{{ optional($partner)->name ?? 'ユーザー名' }}」さんとの取引画面
+            </p>
           </div>
 
-          {{-- メッセージ一覧 --}}
-          <div class="chat-messages">
-              @forelse ($messages as $msg)
-                  @php
-                      $isMine = $msg->user_id === $user->id;
-              @endphp
+          @if ($isSeller)
+            <div class="chat-header-right">
+              {{-- まだ処理を実装していないなら type="button" で見た目だけ合わせておく --}}
+              <button type="button" class="chat-complete-button">
+                取引を完了する
+              </button>
+            </div>
+          @endif
+        </div>
 
-              <div class="chat-message-row {{ $isMine ? 'chat-message-row--me' : 'chat-message-row--other' }}">
-                  <div class="chat-message {{ $isMine ? 'chat-message--me' : 'chat-message--other' }}">
-                      <div class="chat-message-header">
-                          <span class="chat-message-user">
-                              {{ optional($msg->user)->name ?? '不明なユーザー' }}</span>
-                          <span class="chat-message-time">
-                              {{ $msg->created_at->format('Y-m-d H:i') }}
-                          </span>
-                      </div>
+        {{-- 商品情報ブロック（）画像＋商品名＋価格 --}}
+        <div class="chat-product-row">
+          <div class="chat-product-image-wrapper">
+            <img src="{{ asset('storage/' . $product->image_path) }}"
+              alt="商品画像"
+              class="chat-product-image">
+          </div>
+          <div class="chat-product-info">
+            <h3 class="chat-product-name">{{ $product->name }}</h3>
+            <p class="chat-product-price">￥{{ number_format($product->price) }}</p>
+          </div>
+        </div>
 
-                      {{-- 本文表示：相手のみ --}}
-                      @if (!$isMine)
-                          <p class="chat-message-body">{{ $msg->body }}</p>
-                      @endif
+        {{-- ここから下はメッセージ一覧＋フォーム（既存ロジックをベース --}}
+        
+        {{-- メッセージ一覧 --}}
+        <div class="chat-messages">
+          @forelse ($messages as $msg)
+            @php
+              $isMine = $msg->user_id === $user->id;
+            @endphp
 
-                      @if ($msg->image_path)
-                          <img src="{{ asset('storage/' . $msg->image_path) }}"
-                              alt="メッセージ画像"
-                              class="chat-message-image">
-                      @endif
+            <div class="chat-message-row {{ $isMine ? 'chat-message-row--me' : 'chat-message-row--other' }}"">
+              {{-- 相手側のアイコン（左） --}}
+              @unless($isMine)
+                <div class="chat-avatar"></div>
+              @endunless
 
-                      {{-- 自分のメッセージだけ編集/削除ボタンを表示 --}}
-                      @if ($isMine)
-                          <div class="chat-message-actions">
-                              {{-- 編集フォーム --}}
-                              <form action="{{ route('trade.message.update', ['product' => $product->id, 'message' => $msg->id]) }}"
-                                  method="POST"
-                                  class="chat-message-edit-form">
-                                @csrf
-                                @method('PATCH')
-                                <textarea name="body"
-                                          class="chat-message-edit-textarea"
-                                          rows="2">{{ old('body', $msg->body) }}</textarea>
-                                <button type="submit" class="chat-edit-button">編集を保存</button>
-                              </form>
+              <div class="chat-message {{ $isMine ? 'chat-message--me' : 'chat-message--other' }}">
+                <div class="chat-message-header">
+                  <span class="chat-message-user">
+                    {{ optional($msg->user)->name ?? '不明なユーザー' }}
+                  </span>
+                  <span class="chat-message-time">
+                    {{ $msg->created_at->format('Y-m-d H:i') }}
+                  </span>
+                </div>
 
-                              {{-- 削除フォーム --}}
-                              <form action="{{ route('trade.message.destroy', ['product' => $product->id, 'message' => $msg->id]) }}"
-                                    method="POST"
-                                    class="chat-message-delete-form"
-                                    onsubmit="return confirm('このメッセージを削除しますか？');">
-                                  @csrf
-                                  @method('DELETE')
-                                  <button type="submit" class="chat-delete-button">削除</button>
-                              </form>
-                          </div>
-                        @endif
+                {{-- 本文 --}}
+                @if ($msg->body)
+                  <p class="chat-message-body">{{ $msg->body }}</p>
+                @endif
+
+                {{-- 画像 --}}
+                @if ($msg->image_path)
+                  <img src="{{ asset('storage/' . $msg->image_path) }}"
+                    alt="メッセージ画像"
+                    class="chat-message-image">
+                @endif
+
+                {{-- 自分のメッセージだけ編集/削除ボタン --}}
+                @if ($isMine)
+                  <div class="chat-message-actions">
+                    {{-- 編集フォーム --}}
+                    <form action="{{ route('trade.message.update', ['product' => $product->id, 'message' => $msg->id]) }}"
+                        method="POST"
+                        class="chat-message-edit-form">
+                      @csrf
+                      @method('PATCH')
+                      <textarea name="body"
+                              class="chat-message-edit-textarea"
+                              rows="2">{{ old('body', $msg->body) }}</textarea>
+                      <button type="submit" class="chat-edit-button">編集を保存</button>
+                    </form>
+
+                    {{-- 削除フォーム --}}
+                    <form action="{{ route('trade.message.destroy', ['product' => $product->id, 'message' => $msg->id]) }}"
+                      method="POST"
+                      class="chat-message-delete-form"
+                      onsubmit="return confirm('このメッセージを削除しますか？');">
+                      @csrf
+                      @method('DELETE')
+                      <button type="submit" class="chat-delete-button">削除</button>
+                    </form>
                   </div>
+                @endif
               </div>
-            @empty
-              <p class="chat-message-empty">メッセージはまだありません。</p>
-            @endforelse
-          </div>
+
+              {{-- 自分のアイコン（右） --}}
+              @if ($isMine)
+                <div class="chat-avatar chat-avatar--me"></div>
+              @endif
+            </div>
+          @empty
+            <p class="chat-message-empty">メッセージはまだありません。</p>
+          @endforelse
+        </div>
 
         {{-- メッセージ投稿フォーム --}}
         <div class="chat-form-card">
           <form action="{{ route('trade.message.store', ['product' => $product->id]) }}"
-            method="Post"
-            enctype="multipart/form-data">
+              method="POST"
+              enctype="multipart/form-data">
             @csrf
 
             <div class="chat-form-group">
-              <label for="body" class="chat-form-label">本文</label>
+              <label for="body" class="chat-form-label">取引メッセージを記入してください</label>
               <textarea id="body"
                         name="body"
                         class="chat-form-textarea"
                         rows="3">{{ old('body') }}</textarea>
               @error('body')
-                  <p class="chat-error">{{ $message }}</p>
+                <p class="chat-error">{{ $message }}</p>
               @enderror
             </div>
 
-            <div class="chat-form-group">
-                <label for="image" class="chat-form-label">画像（任意）</label>
+            <div class="chat-form-footer">
+              <label for="image" class="chat-form-image-label">
+                画像を追加
                 <input id="image"
                       type="file"
                       name="image"
                       class="chat-form-file">
-                @error('image')
-                    <p class="chat-error">{{ $message }}</p>
-                @enderror
+              </label>
+
+              <button type="submit" class="chat-submit-button">
+                ▶
+              </button>
             </div>
 
-            <div class="chat-form-actions">
-              <button type="submit" class="chat-submit-button">送信</button>
-            </div>
+            @error('image')
+              <p class="chat-error">{{ $message }}</p>
+            @enderror
           </form>
         </div>
-    </div>
-    @endsection
+
+      </div> {{-- /.chat-main --}}
+  </div> {{-- /.chat-layout --}}
+</div> {{-- /.chat-container --}}
+@endsection

@@ -2,6 +2,8 @@
 
 body {
     margin-top: 70px;
+    margin: 0;
+    padding: 0;
 }
 
 .main-header {
@@ -241,7 +243,7 @@ nav[role="navigation"] {
 /* マイページ */
 .mypage-container {
     max-width: 1000px;
-    margin: 40px auto;
+    margin: 70px auto;
     padding: 0 20px;
 }
 
@@ -811,9 +813,12 @@ textarea {
    ============================ */
 
 .chat-container {
-    max-width: 900px;
-    margin: 0 auto;
-    padding: 24px 16px;
+    position: relative;
+    left: 50%;
+    width: 100vw;
+    margin-left: -50vw;
+    padding-top: 35px;
+    box-sizing: border-box;
 }
 
 .chat-title {
@@ -1029,6 +1034,18 @@ textarea {
     margin-top: 4px;
 }
 
+/* アイコン（左右） */
+.chat-avatar {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    background-color: #ddd;
+    flex-shrink: 0;
+}
+.chat-avatar--me {
+    margin-left: 8px;
+}
+
 /* 編集・削除部分 */
 .chat-message-action {
     display: flex;
@@ -1040,6 +1057,37 @@ textarea {
     width: 100%;
     margin-bottom: 4px;
     font-size: 13px;
+}
+
+.chat-form-footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.chat-form-image-label {
+    border: 1px solid #ff8c9a;
+    padding: 6px 12px;
+    border-radius: 4px;
+    font-size: 13px;
+    color: #ff8c9a;
+    cursor: pointer;
+    background-color: #fff;
+}
+
+.chat-form-file {
+    display: none;
+}
+
+.chat-submit-button {
+    width: 52px;
+    height: 36px;
+    border-radius: 4px;
+    border: 1px solid #ff8c9a;
+    background-color: #fff;
+    font-size: 18px;
+    color: #ff8c9a;
+    cursor: pointer;
 }
 
 .chat-edit-button,
@@ -1068,17 +1116,27 @@ textarea {
 .chat-layout {
     display: flex;
     gap: 24px;
-    align-items: flex-start;
+    align-items: stretch;
+    /* 画面の高さ - ヘッダーぶん くらいをざっくり確保 */
+    min-height: calc(100vh - 120px);
 }
 
 /* サイドバー */
 .chat-sidebar {
-    width: 260px;
-    max-height: 600px;
-    overflow-y: auto;
-    background-color: #fff;
-    border-radius: 8px;
-    padding: 12px;
+    width: 220px;
+    background-color: #777;
+    color: #fff;
+    padding: 24px 16px;
+    /* レイアウトの高さに合わせて伸びる */
+    display: flex;
+    flex-direction: column;
+}
+
+.chat-sidebar-heading{
+    font-size: 16px;
+    font-weight: bold;
+    margin-bottom: 24px;
+    padding-left: 20px;
 }
 
 .chat-sidebar-title {
@@ -1134,10 +1192,121 @@ textarea {
     color: #777;
 }
 
+/* 出品者用：商品リスト */
+.chat-sidebar--seller 
+.chat-sidebar-item {
+    display: flex;
+    gap: 8px;
+    padding: 8px;
+    border-radius: 6px;
+    text-decoration: none;
+    color: #333;
+    margin-bottom: 8px;
+    background-color: #fff;
+    border: 1px solid transparent;
+}
+
+.chat-sidebar--seller
+.chat-sidebar-item:hover {
+    background-color: #f7f7f7;
+}
+
+/* 現在表示中の商品 */
+.chat-sidebar--seller
+.chat-sidebar-item.is-active {
+    border-color: #333;
+}
+
+/* 購入者用：見た目だけグレー帯（リストは非表示） */
+.chat-sidebar--buyer
+.chat-sidebar-item {
+    display: none;
+}
+
+.chat-sidebar-empty {
+    font-size: 12px;
+    color: #eee;
+}
+
 /* メイン側 */
 .chat-main {
     flex: 1;
+    background-color: #fff;
+    padding: 24px;
 }
 
+/* 上部ヘッダー（「○○さんとの取引画面」＋ボタン） */
+.chat-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 16px;
+}
 
+.chat-header-left {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
 
+.chat-header-avatar {
+    width: 40px;
+    height: 40px;
+    border-radius: 50px;
+    background-color: #ddd;
+}
+
+.chat-header-title {
+    font-size: 18px;
+    font-weight: bold;
+}
+
+/* 取引を完了するボタン（右上） */
+.chat-complete-button {
+    padding: 8px 20px;
+    border-radius: 999px;
+    border: none;
+    background-color: #ff8c9a;
+    color: #fff;
+    font-size: 13px;
+    cursor: pointer;
+}
+
+/* 商品情報ブロック（画像＋商品名＋価格） */
+.chat-product-row {
+    display: flex;
+    align-items: center;
+    padding: 16px 0;
+    border-top: 1pc solid #ddd;
+    border-bottom: 1px solid #ddd;
+    margin-bottom: 16px;
+    gap: 24px;
+}
+
+.chat-product-image-wrapper {
+    width: 160px;
+    height: 160px;
+    background-color: #f0f0f0;
+    border-radius: 4px;
+    overflow: hidden;
+}
+
+.chat-product-image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.chat-product-info {
+    flex: 1;
+}
+
+.chat-product-name {
+    font-size: 24px;
+    font-weight: bold;
+    margin-bottom: 8px;
+}
+
+.chat-product-price {
+    font-size: 18px;
+}
