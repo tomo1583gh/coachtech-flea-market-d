@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\TradeMessageRequest;
 use App\Models\Product;
 use App\Models\TradeMessage;
+use App\Models\TradeReview;
 use Illuminate\Support\Facades\Auth;
 
 class TradeChatController extends Controller
@@ -49,11 +50,24 @@ class TradeChatController extends Controller
             ->orderBy('created_at')
             ->get();
 
-        return view('trade.chat', [
-            'product'         => $product,
-            'user'            => $user,
-            'tradingProducts' => $tradingProducts,
-            'messages'        => $messages,
+        // ★ 出品者かどうか＆取引相手
+        $isSeller = $product->user_id === $user->id;
+        $partner  = $isSeller ? $product->buyer : $product->user;
+
+        // ★ このユーザーがこの商品で既にレビュー済みか？
+        $hasReviewed = TradeReview::where('product_id', $product->id)
+            ->where('reviewer_id', $user->id)
+            ->exists();
+
+        // ★ ここで一度だけ view に渡す
+        return view('trade.chat',[
+                'product'         => $product,
+                'user'            => $user,
+                'tradingProducts' => $tradingProducts,
+                'messages'        => $messages,
+                'partner'         => $partner,
+                'isSeller'        => $isSeller,
+                'hasReviewed'     => $hasReviewed,
         ]);
     }
 

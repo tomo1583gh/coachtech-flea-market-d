@@ -18,7 +18,7 @@ class MypageController extends Controller
         // ★ ユーザー評価（0～5想定）
         // usersテーブルに rating カラムがある場合：その値を使う
         // カラムが無ければ null → 0 になるのでそのままOK
-        $rating = (int) ($user->rating ?? 0);
+        $rating = $user->average_rating ?? 0; // User の accessor
         if ($rating < 0) $rating = 0;
         if ($rating > 5) $rating = 5;
 
@@ -67,12 +67,12 @@ class MypageController extends Controller
 
         $products = $query->paginate(8);
 
-        return view('mypage', [
-            'user'        => $user,
-            'products'    => $products,
-            'page'        => $page,
-            'totalUnread' => $totalUnread,
-            'rating'      => $rating,
-        ]);
+        return view('mypage', compact(
+            'user',
+            'products',
+            'page',
+            'totalUnread',
+            'rating',
+        ));
     }
 }

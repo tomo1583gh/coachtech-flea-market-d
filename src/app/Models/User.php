@@ -7,6 +7,8 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
+use App\Models\TradeMessage;
+use App\Models\TradeReview;
 
 class User extends Authenticatable implements MustVerifyEmail
 {
@@ -67,9 +69,27 @@ class User extends Authenticatable implements MustVerifyEmail
             && ! empty($this->zip)
             && ! empty($this->address);
     }
-
+    
+    // 取引チャットメッセージ（自分が送ったもの）
     public function tradeMessage()
     {
         return $this->hasMany(TradeMessage::class);
+    }
+    
+    // 自分が「評価された」レビュー一覧
+    public function receivedReviews()
+    {
+        return $this->hasMany(TradeReview::class, 'reviewee_id');
+    }
+
+    // 平均評価（なければ null）
+    public function getAverageRatingAttribute()
+    {
+        $avg = $this->receivedReviews()
+            ->whereNotNull('rating')
+            ->avg('rating');   // rating カラムの平均値
+
+        // レビューが 1 件もない場合は null になるので 0 にする
+        return $avg ? round($avg, 1) : 0;
     }
 }

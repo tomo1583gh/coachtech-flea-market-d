@@ -9,6 +9,7 @@ use App\Http\Controllers\PurchaseController;
 use App\Http\Controllers\RedirectController;
 use App\Http\Controllers\TopController;
 use App\Http\Controllers\TradeChatController;
+use App\Http\Controllers\TradeReviewController;
 use Illuminate\Foundation\Auth\EmailVerificationRequest;
 use Illuminate\Support\Facades\Route;
 
@@ -88,6 +89,11 @@ Route::middleware(['auth', 'verified'])->group(function () {
     // メッセージ削除
     Route::delete('/trades/{product}/messages/{message}', [TradeChatController::class, 'destroy'])
         ->name('trade.message.destroy');
+    
+    // 評価機能
+    Route::post('/trades/{product}/review', [TradeReviewController::class,'store'])
+        ->middleware('auth')
+        ->name('trade.review.store');
 
     // いいね機能
     Route::post('/item/{item_id}/favorite', [FavoriteController::class, 'toggle'])->name('favorite.toggle');

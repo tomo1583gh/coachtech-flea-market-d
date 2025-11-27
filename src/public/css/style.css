@@ -1338,3 +1338,119 @@ textarea {
 .chat-product-price {
     font-size: 18px;
 }
+
+/* ==========================
+    取引完了モーダル
+   ========================== */
+
+/* 全画面オーバーレイのコンテナ */
+.rating-modal {
+    position: fixed !important;
+    inset: 0 !important;
+    /* top/right/bottom/left:0 */
+    display: flex !important;
+    justify-content: center !important;
+    align-items: center !important;
+    background: transparent !important;
+    /* 横長の帯を消す */
+    z-index: 1000 !important;
+
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.2s ease;
+}
+
+/* 開いているときだけ有効 */
+.rating-modal.is-open {
+    opacity: 1;
+    pointer-events: auto;
+}
+
+/* 黒い半透明の背景 */
+.rating-modal__overlay {
+    position: absolute;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.35);
+}
+
+/* 真ん中のカード部分 */
+.rating-modal__content {
+    position: relative !important;
+    top: auto !important;
+    left: auto !important;
+    transform: none !important;
+
+    background: #fff9dd;
+    border-radius: 8px;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
+    padding: 32px 40px;
+    width: 520px;
+    max-width: 90%;
+    text-align: center;
+    z-index: 1;
+}
+
+/* タイトル周り */
+.rating-modal__title {
+    font-size: 20px;
+    font-weight: bold;
+    margin-bottom: 8px;
+}
+
+.rating-modal__subtitle {
+    font-size: 14px;
+    margin-bottom: 24px;
+}
+
+/* 星の並び */
+.rating-stars {
+    display: flex;
+    justify-content: center;
+    gap: 12px;
+    margin-bottom: 24px;
+}
+
+.rating-stars input[type="radio"] {
+    display: none;
+}
+
+.rating-stars label {
+    font-size: 32px;
+    cursor: pointer;
+    filter: grayscale(1);
+    opacity: 0.4;
+    transition: transform 0.1s ease, opacity 0.1s ease, filter 0.1s ease;
+}
+
+.rating-stars input[type="radio"]:checked+label {
+    filter: none;
+    opacity: 1;
+}
+
+.rating-stars label:hover {
+    transform: scale(1.1);
+}
+
+/* ボタンエリア */
+.rating-modal__footer {
+    display: flex;
+    justify-content: center;
+    gap: 16px;
+}
+
+.rating-modal__close {
+    border: 1px solid #ccc;
+    background: #eee;
+    padding: 8px 24px;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.rating-modal__submit {
+    border: none;
+    background: #ff6b8b;
+    color: #fff;
+    padding: 8px 32px;
+    border-radius: 4px;
+    cursor: pointer;
+}

@@ -61,10 +61,9 @@
             </p>
           </div>
 
-          @if (!$isSeller)
+          @if (!$isSeller && !$hasReviewed)
             <div class="chat-header-right">
-              {{-- まだ処理を実装していないなら type="button" で見た目だけ合わせておく --}}
-              <button type="button" class="chat-complete-button">
+              <button type="button" class="chat-complete-button" id="openRatingModal">
                 取引を完了する
               </button>
             </div>
@@ -209,7 +208,88 @@
           </form>
         </div>
 
+        {{-- 取引完了モーダル --}}
+        @if (!$isSeller && !$hasReviewed)
+        <div id="ratingModal" class="rating-modal">
+          <div class="rating-modal__overlay" id="ratingModalOverlay"></div>
+
+          <div class="rating-modal__content">
+            <p class="rating-modal__title">取引が完了しました。</p>
+            <p class="rating-modal__subtitle">今回の取引相手はどうでしたか？</p>
+
+            <form action="{{ route('trade.review.store', ['product' => $product->id]) }}"
+                  method="POST"
+                  class="rating-modal__form">
+              @csrf
+
+              <div class="rating-stars">
+                @for ($i = 1; $i <= 5; $i++)
+                  <input type="radio"
+                          id="star{{ $i }}"
+                          name="rating"
+                          value="{{ $i }}"
+                          {{ $i == 5 ? 'checked' : '' }}>
+                  <label for="star{{ $i }}">★</label>
+                @endfor
+              </div>
+
+              @error('rating')
+                <p class="chat-error">{{ $message }}</p>
+              @enderror
+
+              <div class="rating-modal__footer">
+                <button type="button" class="rating-modal__close" id="ratingModalClose">
+                  キャンセル
+                </button>
+                <button type="submit" class="rating-modal__submit">
+                  送信する
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      @endif
+
       </div> {{-- /.chat-main --}}
   </div> {{-- /.chat-layout --}}
 </div> {{-- /.chat-container --}}
 @endsection
+
+@section('scripts')
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+  const openBtn  = document.getElementById('openRatingModal');   // 「取引を完了する」ボタン
+  const modal    = document.getElementById('ratingModal');           // モーダル本体
+  const overlay  = document.getElementById('ratingModalOverlay');    // 背景
+  const closeBtn = document.getElementById('ratingModalClose');      // キャンセルボタン
+
+  // 評価済みなどで要素がないときは何もしない
+  if (!openBtn || !modal) return;
+
+  const openModal = () => {
+    modal.classList.add('is-open');
+  };
+
+  const closeModal = () => {
+    modal.classList.remove('is-open');
+  };
+
+  openBtn.addEventListener('click', (e) => {
+    e.preventDefault();
+    openModal();
+  });
+
+  if (overlay) {
+    overlay.addEventListener('click', closeModal);
+  }
+
+  if (closeBtn) {
+    closeBtn.addEventListener('click', (e) => {
+      e.preventDefault();
+      closeModal();
+    });
+  }
+});
+</script>
+@endsection
+
