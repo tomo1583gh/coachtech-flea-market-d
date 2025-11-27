@@ -48,13 +48,20 @@
         {{-- 取引ヘッダー：「○○さんとの取引画面」＋　取引を完了する ボタン --}}
         <div class="chat-header">
           <div class="chat-header-left">
-            <div class="chat-header-avatar"></div>
+            <div class="chat-header-avatar">
+              @php
+                  $partnerAvatar = $partner && $partner->image_path
+                      ? asset('storage/' . $partner->image_path)
+                      : asset('images/sample.png'); // ダミー画像
+              @endphp
+              <img src="{{ $partnerAvatar }}" alt="{{ optional($partner)->name ?? 'ユーザー' }}のアイコン">
+            </div>
             <p class="chat-header-title">
               「{{ optional($partner)->name ?? 'ユーザー名' }}」さんとの取引画面
             </p>
           </div>
 
-          @if ($isSeller)
+          @if (!$isSeller)
             <div class="chat-header-right">
               {{-- まだ処理を実装していないなら type="button" で見た目だけ合わせておく --}}
               <button type="button" class="chat-complete-button">
@@ -83,19 +90,28 @@
         <div class="chat-messages">
           @forelse ($messages as $msg)
             @php
-              $isMine = $msg->user_id === $user->id;
+                $isMine = $msg->user_id === $user->id;
+
+                // このメッセージを書いたユーザー
+                $msgUser = $msg->user;
+                // アバター画像のURL（なければダミー画像）
+                $avatarUrl = ($msgUser && $msgUser->image_path)
+                    ? asset('storage/' . $msgUser->image_path)
+                    : asset('images/sample.png'); // ダミー画像　パスは環境に合わせて
             @endphp
 
-            <div class="chat-message-row {{ $isMine ? 'chat-message-row--me' : 'chat-message-row--other' }}"">
+            <div class="chat-message-row {{ $isMine ? 'chat-message-row--me' : 'chat-message-row--other' }}">
               {{-- 相手側のアイコン（左） --}}
               @unless($isMine)
-                <div class="chat-avatar"></div>
+                <div class="chat-avatar">
+                  <img src="{{ $avatarUrl }}" alt="{{ optional($msgUser)->name ?? 'ユーザー' }}のアイコン">
+                </div>
               @endunless
 
               <div class="chat-message {{ $isMine ? 'chat-message--me' : 'chat-message--other' }}">
                 <div class="chat-message-header">
                   <span class="chat-message-user">
-                    {{ optional($msg->user)->name ?? '不明なユーザー' }}
+                    {{ optional($msgUser)->name ?? '不明なユーザー' }}
                   </span>
                   <span class="chat-message-time">
                     {{ $msg->created_at->format('Y-m-d H:i') }}
@@ -110,8 +126,8 @@
                 {{-- 画像 --}}
                 @if ($msg->image_path)
                   <img src="{{ asset('storage/' . $msg->image_path) }}"
-                    alt="メッセージ画像"
-                    class="chat-message-image">
+                      alt="メッセージ画像"
+                      class="chat-message-image">
                 @endif
 
                 {{-- 自分のメッセージだけ編集/削除ボタン --}}
@@ -119,21 +135,21 @@
                   <div class="chat-message-actions">
                     {{-- 編集フォーム --}}
                     <form action="{{ route('trade.message.update', ['product' => $product->id, 'message' => $msg->id]) }}"
-                        method="POST"
-                        class="chat-message-edit-form">
+                          method="POST"
+                          class="chat-message-edit-form">
                       @csrf
                       @method('PATCH')
                       <textarea name="body"
-                              class="chat-message-edit-textarea"
-                              rows="2">{{ old('body', $msg->body) }}</textarea>
+                                class="chat-message-edit-textarea"
+                                rows="2">{{ old('body', $msg->body) }}</textarea>
                       <button type="submit" class="chat-edit-button">編集を保存</button>
                     </form>
 
                     {{-- 削除フォーム --}}
                     <form action="{{ route('trade.message.destroy', ['product' => $product->id, 'message' => $msg->id]) }}"
-                      method="POST"
-                      class="chat-message-delete-form"
-                      onsubmit="return confirm('このメッセージを削除しますか？');">
+                          method="POST"
+                          class="chat-message-delete-form"
+                          onsubmit="return confirm('このメッセージを削除しますか？');">
                       @csrf
                       @method('DELETE')
                       <button type="submit" class="chat-delete-button">削除</button>
@@ -144,13 +160,16 @@
 
               {{-- 自分のアイコン（右） --}}
               @if ($isMine)
-                <div class="chat-avatar chat-avatar--me"></div>
+                <div class="chat-avatar chat-avatar--me">
+                  <img src="{{ $avatarUrl }}" alt="{{ optional($msgUser)->name ?? 'ユーザー' }}のアイコン">
+                </div>
               @endif
             </div>
           @empty
             <p class="chat-message-empty">メッセージはまだありません。</p>
           @endforelse
         </div>
+
 
         {{-- メッセージ投稿フォーム --}}
         <div class="chat-form-card">

@@ -7,3 +7,6 @@ exit
 php artisan migrate
 php artisan db:seed
 exit
+php artisan route:list | group trade
+php artisan route:list | grep trade
+exit
