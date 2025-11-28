@@ -38,8 +38,6 @@ class TradeChatController extends Controller
                 $query->where('user_id', $user->id)
                     ->orWhere('buyer_id', $user->id);
             })
-            // 将来的に trade_status カラムを作ったらここで絞り込み
-            // ->where('trade_status', 'trading')
             ->withCount('tradeMessages')
             ->orderBy('updated_at', 'desc')
             ->get();
@@ -50,24 +48,23 @@ class TradeChatController extends Controller
             ->orderBy('created_at')
             ->get();
 
-        // ★ 出品者かどうか＆取引相手
-        $isSeller = $product->user_id === $user->id;
-        $partner  = $isSeller ? $product->buyer : $product->user;
-
-        // ★ このユーザーがこの商品で既にレビュー済みか？
+        // ★ 自分がこの取引を評価済みか？
         $hasReviewed = TradeReview::where('product_id', $product->id)
             ->where('reviewer_id', $user->id)
             ->exists();
 
-        // ★ ここで一度だけ view に渡す
+        // ★ 購入者ががレビュー済みか？
+        $buyerReviewed = TradeReview::where('product_id', $product->id)
+            ->where('reviewer_id', $product->buyer_id)
+            ->exists();
+
         return view('trade.chat',[
                 'product'         => $product,
                 'user'            => $user,
                 'tradingProducts' => $tradingProducts,
                 'messages'        => $messages,
-                'partner'         => $partner,
-                'isSeller'        => $isSeller,
                 'hasReviewed'     => $hasReviewed,
+                'buyerReviewed'   => $buyerReviewed,
         ]);
     }
 

@@ -133,6 +133,10 @@ body {
     margin: 0 20px 20px;
 }
 
+.top-page {
+    padding-top: 80px;
+}
+
 .tab.active {
     color: red;
     font-weight: bold;
@@ -1404,30 +1408,38 @@ textarea {
 
 /* 星の並び */
 .rating-stars {
-    display: flex;
+    display: inline-flex;
+    flex-direction: row-reverse;
+    /* DOM は 5→1 だが表示は 1→5 */
     justify-content: center;
     gap: 12px;
-    margin-bottom: 24px;
+    margin-bottom: 20px;
 }
 
+/* ラジオは非表示 */
 .rating-stars input[type="radio"] {
     display: none;
 }
 
+/* 基本の星（未選択時はグレー） */
 .rating-stars label {
-    font-size: 32px;
+    font-size: 40px;
+    color: #ccc;
+    /* ← ここをグレーにする */
     cursor: pointer;
-    filter: grayscale(1);
-    opacity: 0.4;
-    transition: transform 0.1s ease, opacity 0.1s ease, filter 0.1s ease;
+    transition: color 0.2s ease, transform 0.2s ease;
 }
 
-.rating-stars input[type="radio"]:checked+label {
-    filter: none;
-    opacity: 1;
+/* チェックされた値“以下”の星を黄色に */
+.rating-stars input[type="radio"]:checked~label {
+    color: #ffd700;
+    /* 黄色 */
 }
 
-.rating-stars label:hover {
+/* ホバー中のプレビュー（お好みで） */
+.rating-stars label:hover,
+.rating-stars label:hover~label {
+    color: #ffd700;
     transform: scale(1.1);
 }
 

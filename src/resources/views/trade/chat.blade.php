@@ -63,7 +63,7 @@
 
           @if (!$isSeller && !$hasReviewed)
             <div class="chat-header-right">
-              <button type="button" class="chat-complete-button" id="openRatingModal">
+              <button type="button" class="chat-complete-button" id="completeTradeButton">
                 取引を完了する
               </button>
             </div>
@@ -208,9 +208,11 @@
           </form>
         </div>
 
-        {{-- 取引完了モーダル --}}
-        @if (!$isSeller && !$hasReviewed)
-        <div id="ratingModal" class="rating-modal">
+        {{-- 取引完了モーダル：購入者＝ボタンから、出品者＝自動表示 --}}
+        @if (!$hasReviewed && (!$isSeller || $buyerReviewed))
+        <div id="ratingModal"
+              class="rating-modal"
+              data-auto-open="{{ $isSeller ? '1' : '0' }}">
           <div class="rating-modal__overlay" id="ratingModalOverlay"></div>
 
           <div class="rating-modal__content">
@@ -223,7 +225,7 @@
               @csrf
 
               <div class="rating-stars">
-                @for ($i = 1; $i <= 5; $i++)
+                @for ($i = 5; $i >= 1; $i--)
                   <input type="radio"
                           id="star{{ $i }}"
                           name="rating"
@@ -258,13 +260,15 @@
 @section('scripts')
 <script>
 document.addEventListener('DOMContentLoaded', function () {
-  const openBtn  = document.getElementById('openRatingModal');   // 「取引を完了する」ボタン
   const modal    = document.getElementById('ratingModal');           // モーダル本体
+  if (!modal) return; // モーダルが存在しないページでは何もしない
+
+  const openBtn  = document.getElementById('completeTradeButton');   // 「取引を完了する」ボタン
   const overlay  = document.getElementById('ratingModalOverlay');    // 背景
   const closeBtn = document.getElementById('ratingModalClose');      // キャンセルボタン
 
-  // 評価済みなどで要素がないときは何もしない
-  if (!openBtn || !modal) return;
+  // 出品者で自動オープンするかどうか（data-auto-open="1"を見る）
+  const autoOpen = modal.dataset.autoOpen === '1';
 
   const openModal = () => {
     modal.classList.add('is-open');
@@ -274,16 +278,21 @@ document.addEventListener('DOMContentLoaded', function () {
     modal.classList.remove('is-open');
   };
 
-  openBtn.addEventListener('click', (e) => {
-    e.preventDefault();
-    openModal();
-  });
-
-  if (overlay) {
-    overlay.addEventListener('click', closeModal);
+  // 購入者：ボタンクリックで開く
+  if (openBtn) {
+    openBtn.addEventListener('click', (e) => {
+      e.preventDefault();
+      openModal();
+    });
   }
 
-  if (closeBtn) {
+  // 出品者：ページ表示時に自動で開く
+  if (autoOpen) {
+    openModal();
+  }
+
+  // オーバーレイ/キャンセルボタンで閉じる
+  if (overlay) {
     closeBtn.addEventListener('click', (e) => {
       e.preventDefault();
       closeModal();

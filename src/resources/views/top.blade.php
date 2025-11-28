@@ -1,7 +1,7 @@
 @extends('layouts.app')
 
 @section('content')
-<div class="tab-area">
+<div class="tab-area top-page">
     <a href="{{ route('top', ['keyword' => request('keyword')]) }}"
         class="{{ request('page') !== 'mylist' ? 'tab active' : 'tab' }}">
         おすすめ
