@@ -82,9 +82,13 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::post('/trades/{product}/message', [TradeChatController::class, 'store'])
         ->name('trade.message.store');
 
-    // メッセージ編集
+    // メッセージ更新
     Route::patch('/trades/{product}/messages/{message}', [TradeChatController::class,'update'])
         ->name('trade.message.update');
+
+    // メッセージ編集フォーム表示
+    Route::get('/trades/{product}/messages/{message}/edit', [TradeChatController::class, 'edit'])
+        ->name('trade.message.edit');
 
     // メッセージ削除
     Route::delete('/trades/{product}/messages/{message}', [TradeChatController::class, 'destroy'])

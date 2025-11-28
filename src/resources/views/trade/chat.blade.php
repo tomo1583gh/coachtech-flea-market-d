@@ -4,8 +4,10 @@
 @php
     // ログインユーザーが出品者かどうか
     $isSeller = $product->user_id === $user->id;
-    // 取引相手（出品者なら buyer / 購入者なら user）
-    $partner = $isSeller ? $product->buyer : $product->user;
+    // 取引相手
+    // 自分が出品者なら → 相手は buyer 
+    // 自分が購入者なら → 相手は seller
+    $partner = $isSeller ? $product->buyer : $product->seller;
 @endphp
 
 <div class="chat-container">
@@ -129,20 +131,14 @@
                       class="chat-message-image">
                 @endif
 
-                {{-- 自分のメッセージだけ編集/削除ボタン --}}
+                {{-- 自分のメッセージだけ編集/削除リンク --}}
                 @if ($isMine)
                   <div class="chat-message-actions">
-                    {{-- 編集フォーム --}}
-                    <form action="{{ route('trade.message.update', ['product' => $product->id, 'message' => $msg->id]) }}"
-                          method="POST"
-                          class="chat-message-edit-form">
-                      @csrf
-                      @method('PATCH')
-                      <textarea name="body"
-                                class="chat-message-edit-textarea"
-                                rows="2">{{ old('body', $msg->body) }}</textarea>
-                      <button type="submit" class="chat-edit-button">編集を保存</button>
-                    </form>
+                    {{-- 編集リンク --}}
+                    <a href="{{ route('trade.message.edit', ['product' => $product->id, 'message' => $msg->id]) }}"
+                      class="chat-message-action-link">
+                      編集
+                    </a>
 
                     {{-- 削除フォーム --}}
                     <form action="{{ route('trade.message.destroy', ['product' => $product->id, 'message' => $msg->id]) }}"
@@ -151,7 +147,9 @@
                           onsubmit="return confirm('このメッセージを削除しますか？');">
                       @csrf
                       @method('DELETE')
-                      <button type="submit" class="chat-delete-button">削除</button>
+                      <button type="submit" class="chat-message-action-link">
+                        削除
+                      </button>
                     </form>
                   </div>
                 @endif
@@ -169,44 +167,61 @@
           @endforelse
         </div>
 
-
         {{-- メッセージ投稿フォーム --}}
-        <div class="chat-form-card">
-          <form action="{{ route('trade.message.store', ['product' => $product->id]) }}"
-              method="POST"
-              enctype="multipart/form-data">
-            @csrf
+        <form action="{{ route('trade.message.store', ['product' => $product->id]) }}"
+            method="POST"
+            enctype="multipart/form-data"
+            class="chat-input-form">
+          @csrf
 
-            <div class="chat-form-group">
-              <label for="body" class="chat-form-label">取引メッセージを記入してください</label>
-              <textarea id="body"
-                        name="body"
-                        class="chat-form-textarea"
-                        rows="3">{{ old('body') }}</textarea>
-              @error('body')
-                <p class="chat-error">{{ $message }}</p>
-              @enderror
-            </div>
-
-            <div class="chat-form-footer">
-              <label for="image" class="chat-form-image-label">
+          <div class="chat-input-row">
+            {{-- テキスト入力欄（左：横いっぱい） --}}
+            <textarea id="message_body"
+                  name="body"
+                  class="chat-input-textarea"
+                  rows="2"
+                  placeholder="取引メッセージを記入してください">{{ old('body') }}</textarea>
+            
+            {{-- 右側（画像ボタン＋送信ボタン） --}}
+            <div class="chat-input-controls">
+              {{-- 画像を追加ボタン --}}
+              <label class="chat-image-button">
                 画像を追加
-                <input id="image"
-                      type="file"
-                      name="image"
-                      class="chat-form-file">
+                <input type="file"
+                        name="image"
+                        class="chat-image-input">
               </label>
 
-              <button type="submit" class="chat-submit-button">
-                ▶
-              </button>
+              {{-- 送信ボタン（紙飛行機アイコン） --}}
+              <button type="submit" class="chat-send-button" aria-label="送信">
+    <svg class="chat-send-icon" viewBox="0 0 24 24" aria-hidden="true">
+        {{-- 外枠（紙飛行機の輪郭） --}}
+        <path d="M3 11.5L21 3L14.5 21L11 13L3 11.5Z"
+              fill="none"
+              stroke="#999999"
+              stroke-width="1.5"
+              stroke-linejoin="round"
+              stroke-linecap="round" />
+        {{-- 中央の折れ線 --}}
+        <path d="M11 13L21 3"
+              fill="none"
+              stroke="#999999"
+              stroke-width="1.5"
+              stroke-linejoin="round"
+              stroke-linecap="round" />
+    </svg>
+</button>
             </div>
+          </div>
 
-            @error('image')
-              <p class="chat-error">{{ $message }}</p>
-            @enderror
-          </form>
-        </div>
+          {{-- バリデーションエラー表示 --}}
+          @error('body')
+              <p class="form-error">{{ $message }}</p>
+          @enderror
+          @error('image')
+              <p class="form-error">{{ $message }}</p>
+          @enderror
+        </form>
 
         {{-- 取引完了モーダル：購入者＝ボタンから、出品者＝自動表示 --}}
         @if (!$hasReviewed && (!$isSeller || $buyerReviewed))

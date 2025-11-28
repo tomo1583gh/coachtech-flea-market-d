@@ -58,6 +58,8 @@ class TradeChatController extends Controller
             ->where('reviewer_id', $product->buyer_id)
             ->exists();
 
+            $product->load(['seller', 'buyer']);
+
         return view('trade.chat',[
                 'product'         => $product,
                 'user'            => $user,
@@ -156,5 +158,33 @@ class TradeChatController extends Controller
         return redirect()
             ->route('trade.chat.show', ['product' => $product-> id])
             ->with('status', 'メッセージを削除しました。');
+    }
+
+    /**
+     * メッセージ編集フォーム表示
+     * 
+     * @param  \App_Models\Product       $product
+     * @param  \App_Models\TradeMessage  $message
+     * @param  \Illuminate\View\View
+     */
+    public function edit(Product $product, TradeMessage $message)
+    {
+        $user = Auth::user();
+
+        // このメッセージが本当にこの商品のものか　（URL改ざん対策）
+        if ($message->product_id != $product->id) {
+            abort(404);
+        }
+
+        // 自分のメッセージ以外は編集不可能
+        if ($message->user_id != $user->id) {
+            abort(403);
+        }
+
+        return view('trade.message_edit', [
+            'product' => $product,
+            'message' => $message,
+            'user'    => $user,
+        ]);
     }
 }

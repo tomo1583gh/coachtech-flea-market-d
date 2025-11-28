@@ -869,9 +869,8 @@ textarea {
 }
 
 .chat-message {
-    margin-bottom: 12px;
-    padding-bottom: 12px;
-    border-bottom: 1px solid #eee;
+    position: relative;
+    padding-bottom: 22px;
 }
 
 .chat-message:last-child {
@@ -1037,7 +1036,7 @@ textarea {
 
 .chat-message-body {
     font-size: 14px;
-    margin-bottom: 4px;
+    margin-bottom: 20px;
     word-break: break-all;
 }
 
@@ -1070,10 +1069,33 @@ textarea {
 }
 
 /* 編集・削除部分 */
-.chat-message-action {
+.chat-message-actions {
+    position: absolute;
+    right: 10px;
+    bottom: 6px;
     display: flex;
-    gap: 8px;
-    margin-top: 6px;
+    gap: 12px;
+    font-size: 10px;
+    color: #999;
+}
+
+.chat-message-action-link {
+    border: none;
+    background: none;
+    padding: 0;
+    margin: 0;
+    font: inherit;
+    color: inherit;
+    cursor: pointer;
+    text-decoration: none;
+}
+
+.chat-message-action-link:hover {
+    text-decoration: underline;
+}
+
+.chat-message-delete-form {
+    margin: 0;
 }
 
 .chat-message-edit-textarea {
@@ -1343,6 +1365,87 @@ textarea {
     font-size: 18px;
 }
 
+/* 全体のボックス（白背景＋薄い枠） */
+.chat-input-form {
+    margin-top: 24px;
+    padding: 16px 24px;
+    background-color: #fff;
+    border-radius: 8px;
+    box-shadow: 0 0 8px rgba(0,0,0,0.3);
+}
+
+/* ラベル「取引メッセージを記入してください」 */
+.chat-input-label {
+    display: block;
+    font-size: 14px;
+    font-weight: bold;
+    margin-bottom: 8px;
+}
+
+/* テキストエリア＋ボタン群を横並びにする */
+.chat-input-row {
+    display: flex;
+    align-items: flex-end;
+    gap: 16px;
+}
+
+/* テキストエリア（左側を使う） */
+.chat-input-textarea {
+    flex: 1;
+    min-height: 60px;
+    padding: 8px 10px;
+    border-radius: 4px;
+    border: 1px solid #ddd;
+    font-size: 14px;
+    resize: vertical;
+}
+
+/* 右側のボタンまとめ */
+.chat-input-controls {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+/* 画像追加ボタン */
+.chat-image-button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 8px 16px;
+    border-radius: 4px;
+    border: 1px solid #ff99aa;
+    background-color: #fff;
+    font-size: 12px;
+    color: #ff99aa;
+    cursor: pointer;
+    white-space: nowrap;
+}
+
+/* 中の file input は非表示 */
+.chat-image-input {
+    display: none;
+}
+
+/* 送信ボタン */
+.chat-send-button {
+    width: 40px;
+    height: 40px;
+    border: none;
+    background: transparent;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0;
+}
+
+/* ホバー時ちょっとだけ強調 */
+.chat-send-button:hover
+.chat-send-icon path {
+    stroke: #666666;
+}
+
 /* ==========================
     取引完了モーダル
    ========================== */
@@ -1464,5 +1567,65 @@ textarea {
     color: #fff;
     padding: 8px 32px;
     border-radius: 4px;
+    cursor: pointer;
+}
+
+/* --------------------
+    編集画面
+　-------------------- */
+.chat-edit-page {
+    max-width: 600px;
+    margin: 250px auto;
+    padding: 24px;
+    background: #fff;
+    border-radius: 8px;
+    box-shadow: 0 0 8px rgba(0,0,0,0.05);
+}
+
+.chat-edit-title {
+    font-size: 20px;
+    margin-bottom: 16px;
+}
+
+.chat-edit-product-name {
+    font-weight: bold;
+}
+
+.chat-edit-product-price {
+    color: #666;
+    margin-bottom: 16px;
+}
+
+.chat-edit-field {
+    margin-bottom: 16px;
+}
+
+.chat-edit-label {
+    display: block;
+    margin-bottom: 4px;
+    font-size: 14px;
+}
+
+.chat-edit-textarea {
+    width: 100%;
+    padding: 8px;
+    border-radius: 4px;
+    border: 1px solid #ccc;
+    resize: vertical;
+}
+
+.chat-edit-cancel {
+    font-size: 14px;
+    color: #666;
+    text-decoration: none;
+}
+
+.chat-edit-submit {
+    padding: 6px 16px;
+    border-radius: 4px;
+    border: none;
+    background: #ff6f61;
+    color: #fff;
+    font-size: 14px;
     cursor: pointer;
 }
