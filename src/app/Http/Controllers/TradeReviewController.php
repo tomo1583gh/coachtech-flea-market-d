@@ -5,6 +5,9 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Product;
 use App\Models\TradeReview;
+use App\Mail\TradeCompletedMail;
+use App\Models\User;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Auth;
 
 class TradeReviewController extends Controller
@@ -25,7 +28,7 @@ class TradeReviewController extends Controller
 
         if ($already) {
             return redirect()
-                ->route('top)')
+                ->route('top')
                 ->with('status', 'この取引はすでに評価済みです。');
         }
 
@@ -42,7 +45,6 @@ class TradeReviewController extends Controller
         // ★ バリデーション
         $validated = $request->validate([
             'rating'  => ['required', 'integer', 'between:1,5'],
-            'comment' => ['nullable', 'string', 'max:1000'],
         ]);
 
         // ★ レビュー保存
@@ -52,6 +54,24 @@ class TradeReviewController extends Controller
             'reviewee_id' => $revieweeId,
             'rating'      => $validated['rating'],
         ]);
+
+        // ★ 購入者が評価したタイミングで出品者にメール送信
+        // 「レビューを書いた人＝購入者」のときだけ送る
+        if ($user->id === $product->buyer_id) {
+
+            // 出品者情報を user_id から取得
+            $seller = User::find($product->user_id);
+
+            // 出品者情報がちゃんと取れているときだけ送信
+            if ($seller && $seller->email) {
+                Mail::to($seller->email)
+                    ->send(new TradeCompletedMail(
+                        $product,            // 取引された商品
+                        $user,              // 購入者（buyer）
+                        $validated['rating'] // 評価（1～5）
+                    ));
+            }
+        }
 
         // 平均評価は accessor で毎回計算するので、ここで users テーブルを
         // 更新する必要はありません
