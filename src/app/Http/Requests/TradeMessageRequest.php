@@ -35,7 +35,7 @@ class TradeMessageRequest extends FormRequest
     /**
      * Get the error messages for the defined validation rules.
      */
-    public function message(): array
+    public function messages(): array
     {
         return [
             // 本文：未入力
@@ -44,8 +44,10 @@ class TradeMessageRequest extends FormRequest
             // 本文：401文字以上
             'body.max' => '本文は400文字以内で入力してください',
 
-            // 画像：jpeg/png 以外
+            // 画像：場増以外
             'image.image' => '画像ファイルをアップロードしてください',
+
+            // 画像：jpeg/png 以外
             'image.mimes' => '「.png」または「.jpeg」形式でアップロードしてください',
         ];
     }

@@ -175,14 +175,28 @@
           @csrf
 
           <div class="chat-input-row">
-            {{-- テキスト入力欄（左：横いっぱい） --}}
+            {{-- 左側：テキスト入力＆エラー表示 --}}
+            <div class="chat-input-main">
+              {{-- 本文・画像のエラーを入力欄の上にまとめて表示 --}}
+              @if ($errors->has('body') || $errors->has('image'))
+                <div class="form-error-group">
+                  @error('body')
+                    <p class="form-error--top">{{ $message }}</p>
+                  @enderror
+                  @error('image')
+                    <p class="form-error--top">{{ $message }}</p>
+                  @enderror
+                </div>
+              @endif
+
             <textarea id="message_body"
                   name="body"
                   class="chat-input-textarea"
                   rows="2"
                   placeholder="取引メッセージを記入してください">{{ old('body') }}</textarea>
+            </div>
             
-            {{-- 右側（画像ボタン＋送信ボタン） --}}
+            {{-- 右側：（画像ボタン＋送信ボタン） --}}
             <div class="chat-input-controls">
               {{-- 画像を追加ボタン --}}
               <label class="chat-image-button">
@@ -194,33 +208,25 @@
 
               {{-- 送信ボタン（紙飛行機アイコン） --}}
               <button type="submit" class="chat-send-button" aria-label="送信">
-    <svg class="chat-send-icon" viewBox="0 0 24 24" aria-hidden="true">
-        {{-- 外枠（紙飛行機の輪郭） --}}
-        <path d="M3 11.5L21 3L14.5 21L11 13L3 11.5Z"
-              fill="none"
-              stroke="#999999"
-              stroke-width="1.5"
-              stroke-linejoin="round"
-              stroke-linecap="round" />
-        {{-- 中央の折れ線 --}}
-        <path d="M11 13L21 3"
-              fill="none"
-              stroke="#999999"
-              stroke-width="1.5"
-              stroke-linejoin="round"
-              stroke-linecap="round" />
-    </svg>
-</button>
+                <svg class="chat-send-icon" viewBox="0 0 24 24" aria-hidden="true">
+                  {{-- 外枠（紙飛行機の輪郭） --}}
+                  <path d="M3 11.5L21 3L14.5 21L11 13L3 11.5Z"
+                    fill="none"
+                    stroke="#999999"
+                    stroke-width="1.5"
+                    stroke-linejoin="round"
+                    stroke-linecap="round" />
+                  {{-- 中央の折れ線 --}}
+                  <path d="M11 13L21 3"
+                    fill="none"
+                    stroke="#999999"
+                    stroke-width="1.5"
+                    stroke-linejoin="round"
+                    stroke-linecap="round" />
+                </svg>
+              </button>
             </div>
           </div>
-
-          {{-- バリデーションエラー表示 --}}
-          @error('body')
-              <p class="form-error">{{ $message }}</p>
-          @enderror
-          @error('image')
-              <p class="form-error">{{ $message }}</p>
-          @enderror
         </form>
 
         {{-- 取引完了モーダル：購入者＝ボタンから、出品者＝自動表示 --}}
