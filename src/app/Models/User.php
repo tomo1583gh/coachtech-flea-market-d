@@ -71,7 +71,7 @@ class User extends Authenticatable implements MustVerifyEmail
     }
 
     // 取引チャットメッセージ（自分が送ったもの）
-    public function tradeMessage()
+    public function tradeMessages()
     {
         return $this->hasMany(TradeMessage::class);
     }
