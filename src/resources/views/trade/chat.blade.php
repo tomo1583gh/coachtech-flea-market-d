@@ -31,9 +31,6 @@
               </div>
               <div class="chat-sidebar-info">
                 <p class="chat-sidebar-name">{{ $tradeProduct->name }}</p>
-                <p class="chat-sidebar-meta">
-                  メッセージ {{ $tradeProduct->trade_message_count }} 件
-                </p>
               </div>
             </a>
           @empty

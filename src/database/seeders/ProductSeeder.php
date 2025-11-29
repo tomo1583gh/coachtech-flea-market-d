@@ -14,11 +14,22 @@ class ProductSeeder extends Seeder
      */
     public function run(): void
     {
-        $user = User::first() ?? User::factory()->create();
+        // UserSeeder で作った2人の出荷者を取得
+        // (メールアドレスは UserSeeder と揃えておく)
+        $seller1 = User::where('email', 'seller1@example.com')->first();
+        $seller2 = User::where('email', 'seller2@example.com')->first();
+
+        // 念のため、いなかったら既存ユーザーで代用
+        if (! $seller1) {
+            $seller1 = User::first();
+        }
+        if (! $seller2) {
+            $seller2 = User::first() ?? $seller1;
+        }
 
         $products = [
+            // CO01　腕時計
             [
-                'user_id' => $user->id,
                 'name' => '腕時計',
                 'price' => 15000,
                 'description' => 'スタイリッシュなデザインのメンズ腕時計',
@@ -26,8 +37,8 @@ class ProductSeeder extends Seeder
                 'state' => 'new',
                 'category_names' => ['ファッション', 'メンズ'],
             ],
+            // CO02　HDD
             [
-                'user_id' => $user->id,
                 'name' => 'HDD',
                 'price' => 5000,
                 'description' => '高速で信頼性の高いハードディスク',
@@ -35,8 +46,8 @@ class ProductSeeder extends Seeder
                 'state' => 'good',
                 'category_names' => ['家電'],
             ],
+            // CO03　玉ねぎ
             [
-                'user_id' => $user->id,
                 'name' => '玉ねぎ3束',
                 'price' => 300,
                 'description' => '新鮮な玉ねぎ3束セット',
@@ -44,8 +55,8 @@ class ProductSeeder extends Seeder
                 'state' => 'fair',
                 'category_names' => ['食品'],
             ],
+            // CO04　革靴
             [
-                'user_id' => $user->id,
                 'name' => '革靴',
                 'price' => 4000,
                 'description' => 'クラシックなデザインの革靴',
@@ -53,8 +64,8 @@ class ProductSeeder extends Seeder
                 'state' => 'poor',
                 'category_names' => ['ファッション', 'メンズ'],
             ],
+            // CO05　ノートPC
             [
-                'user_id' => $user->id,
                 'name' => 'ノートPC',
                 'price' => 45000,
                 'description' => '高性能なノートパソコン',
@@ -62,8 +73,8 @@ class ProductSeeder extends Seeder
                 'state' => 'new',
                 'category_names' => ['家電'],
             ],
+            // CO06　マイク
             [
-                'user_id' => $user->id,
                 'name' => 'マイク',
                 'price' => 8000,
                 'description' => '高音質のレコーディング用マイク',
@@ -71,8 +82,8 @@ class ProductSeeder extends Seeder
                 'state' => 'good',
                 'category_names' => ['家電'],
             ],
+            // CO07　ショルダーバッグ
             [
-                'user_id' => $user->id,
                 'name' => 'ショルダーバッグ',
                 'price' => 3500,
                 'description' => 'おしゃれなショルダーバッグ',
@@ -80,8 +91,8 @@ class ProductSeeder extends Seeder
                 'state' => 'fair',
                 'category_names' => ['ファッション', 'レディース'],
             ],
+            // CO08　タンブラー
             [
-                'user_id' => $user->id,
                 'name' => 'タンブラー',
                 'price' => 500,
                 'description' => '使いやすいタンブラー',
@@ -89,8 +100,8 @@ class ProductSeeder extends Seeder
                 'state' => 'poor',
                 'category_names' => ['キッチン'],
             ],
+            // CO09　コーヒーミル
             [
-                'user_id' => $user->id,
                 'name' => 'コーヒーミル',
                 'price' => 4000,
                 'description' => '手動のコーヒーミル',
@@ -98,8 +109,8 @@ class ProductSeeder extends Seeder
                 'state' => 'new',
                 'category_names' => ['キッチン'],
             ],
+            // CO10　メイクセット
             [
-                'user_id' => $user->id,
                 'name' => 'メイクセット',
                 'price' => 2500,
                 'description' => '便利なメイクアップセット',
@@ -109,9 +120,12 @@ class ProductSeeder extends Seeder
             ],
         ];
 
-        foreach ($products as $data) {
+        foreach ($products as $index =>$data) {
             $categoryNames = $data['category_names'];
             unset($data['category_names']);
+
+            // 0～4番目(CO01~CO05) → seller1, 5~9番目(CO06~CO10) → seller2
+            $data['user_id'] = $index <=4 ? $seller1->id : $seller2->id;
 
             $product = Product::create($data);
 

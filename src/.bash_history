@@ -10,3 +10,5 @@ exit
 php artisan route:list | group trade
 php artisan route:list | grep trade
 exit
+php artisan migrate:fresh --seed
+exit
