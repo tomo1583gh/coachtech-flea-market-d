@@ -14,12 +14,14 @@
             <div class="mypage-info">
                 <h2 class="mypage-username">{{ $user->name }}</h2>
 
-                {{-- ★ 評価（5段階。rating は Controller から渡している想定） --}}
-                <div class="mypage-rating">
-                    @for ($i = 1; $i <= 5; $i++)
-                        <span class="rating-star {{ $i <= $rating ? 'rating-star--filled' : '' }}">★</span>
-                    @endfor
-                </div>
+                {{-- ★ 評価がある場合のみ表示 --}}
+                @if ($hasRating)
+                    <div class="mypage-rating">
+                        @for ($i = 1; $i <= 5; $i++)
+                            <span class="rating-star {{ $i <= $rating ? 'rating-star--filled' : '' }}">★</span>
+                        @endfor
+                    </div>
+                @endif
             </div>
         </div>
 

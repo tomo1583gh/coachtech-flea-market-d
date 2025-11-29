@@ -69,27 +69,29 @@ class User extends Authenticatable implements MustVerifyEmail
             && ! empty($this->zip)
             && ! empty($this->address);
     }
-    
+
     // 取引チャットメッセージ（自分が送ったもの）
     public function tradeMessage()
     {
         return $this->hasMany(TradeMessage::class);
     }
-    
+
     // 自分が「評価された」レビュー一覧
     public function receivedReviews()
     {
         return $this->hasMany(TradeReview::class, 'reviewee_id');
     }
 
-    // 平均評価（なければ null）
+    // 平均評価（四捨五入。評価が無いなら null）
     public function getAverageRatingAttribute()
     {
         $avg = $this->receivedReviews()
-            ->whereNotNull('rating')
-            ->avg('rating');   // rating カラムの平均値
+            ->avg('rating'); // rating カラム
 
-        // レビューが 1 件もない場合は null になるので 0 にする
-        return $avg ? round($avg, 1) : 0;
+        if ($avg === null) {
+            return null; // 評価が1件もない
+        }
+
+        return round($avg); // 四捨五入して整数に
     }
 }

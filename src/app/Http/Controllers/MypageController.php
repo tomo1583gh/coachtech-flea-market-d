@@ -15,12 +15,19 @@ class MypageController extends Controller
     {
         $user = Auth::user();
 
-        // ★ ユーザー評価（0～5想定）
-        // usersテーブルに rating カラムがある場合：その値を使う
-        // カラムが無ければ null → 0 になるのでそのままOK
-        $rating = $user->average_rating ?? 0; // User の accessor
-        if ($rating < 0) $rating = 0;
-        if ($rating > 5) $rating = 5;
+        // ★ ユーザー評価（User のaccessor: average_rating を利用）
+        // 評価がない場合...null
+        // 評価がある場合...1～5 の整数（round済み）想定
+        $rating = $user->average_rating; // ← ここで ?? 0 を外す
+
+        // 評価が1件以上あるかどうか（Blade で使うフラグ）
+        $hasRating = !is_null($rating);
+
+        // 念のため 0~5 の範囲に丸めておきたい場合（任意）
+        if (!is_null($rating)) {
+            if ($rating < 0) $rating = 0;
+            if ($rating > 5) $rating = 5;
+        }
 
         // ?page=xxx （デフォルトは 'sell'）
         $page = $request->query('page', 'sell');
@@ -73,6 +80,7 @@ class MypageController extends Controller
             'page',
             'totalUnread',
             'rating',
+            'hasRating',
         ));
     }
 }
