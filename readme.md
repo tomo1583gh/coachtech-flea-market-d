@@ -62,7 +62,7 @@
 
     ※  MySQLは、OSによって起動しない場合があるのでそれぞれのPCに合わせてdocker-compose.ymlファイルを編集して下さい。
 
-## laravel　環境構築
+## 🛠️ laravel　環境構築
 
 1. PHPコンテナに入る
 
@@ -101,7 +101,7 @@
 
 9. Stripeの公開鍵と秘密鍵を`.env`に設定
 
-## 使用技術
+## 🛠️ 使用技術
 
 - php 8.2.12
 
@@ -117,7 +117,7 @@
 
 - Blade + CSS
 
-## URL
+## 🔗URL
 
 - 開発環境：http://localhost:8000
 
@@ -127,7 +127,7 @@
 
 - Stripe:https://dashboard.stripe.com/test
 
-## ER図
+## 📌ER図
 
 ![ER図](screenshot/ER_chat-function.png)
 
