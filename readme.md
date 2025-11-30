@@ -48,11 +48,11 @@
 - ユーザーの平均評価を表示
 
 #### 🔥 テストコード
-- 以下4つの機能に分けてテストコードを実装
-　・TradeChatTest （取引チャット）
-　・TradeListTest　（マイページ取引中一覧）
-　・TradeReviewTest　（評価機能）
-　・TradeMailTest　（取引完了メール）
+以下4つの機能に分けてテストコードを実装
+- TradeChatTest （取引チャット）
+- TradeListTest　（マイページ取引中一覧）
+- TradeReviewTest　（評価機能）
+- TradeMailTest　（取引完了メール）
 
 ※　追加実装以前の機能についても、テストコードが実装してあります。以下の手順で実行できます。
 #### テスト実行方法
