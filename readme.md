@@ -44,8 +44,29 @@
 - 商品ごとのバッジ表示アリ
 
 #### 🔥 評価機能
--　取引終了後に相互評価
+- 取引終了後に相互評価
 - ユーザーの平均評価を表示
+
+#### 🔥 テストコード
+- 以下4つの機能に分けてテストコードを実装
+　・TradeChatTest （取引チャット）
+　・TradeListTest　（マイページ取引中一覧）
+　・TradeReviewTest　（評価機能）
+　・TradeMailTest　（取引完了メール）
+
+※　追加実装以前の機能についても、テストコードが実装してあります。以下の手順で実行できます。
+#### テスト実行方法
+
+``` 
+# 全テスト実行
+php artisan test
+
+# 個別に実行する場合の例
+php artisan test --filter=TradeChatTest
+php artisan test --filter=TradeListTest
+php artisan test --filter=TradeReviewTest
+php artisan test --filter=TradeMailTest
+```
 
 ## 🐳 dockerビルド手順
 
