@@ -278,6 +278,40 @@
 @section('scripts')
 <script>
 document.addEventListener('DOMContentLoaded', function () {
+  // ================================
+// ② チャット本文の「下書き」保存
+// ================================
+const textarea = document.getElementById('message_body');
+const form     = textarea ? textarea.closest('form') : null;
+
+// 商品ごとにキーを分ける（product_id ベース）
+const storageKey = 'trade_draft_body_{{ $product->id }}';
+
+if (textarea) {
+  // 1. ページ読み込み時：localStorage から復元
+  const saved = localStorage.getItem(storageKey);
+
+  // old('body') が空で、かつ saved がある時だけ上書き
+  if (!textarea.value && saved !== null) {
+    textarea.value = saved;
+  }
+
+  // 2. 入力のたびに localstorage に保存
+  textarea.addEventListener('input', () => {
+    localStorage.setItem(storageKey, textarea.value);
+  });
+}
+
+// 3. フォーム送信時：送信したので draft は削除
+if (form) {
+  form.addEventListener('submit', () => {
+    localStorage.removeItem(storageKey);
+  });
+}
+
+  // ========================
+  // ① 評価モーダルの処理
+  // ========================
   const modal    = document.getElementById('ratingModal');           // モーダル本体
   if (!modal) return; // モーダルが存在しないページでは何もしない
 
@@ -285,24 +319,25 @@ document.addEventListener('DOMContentLoaded', function () {
   const overlay  = document.getElementById('ratingModalOverlay');    // 背景
   const closeBtn = document.getElementById('ratingModalClose');      // キャンセルボタン
 
-  // 出品者で自動オープンするかどうか（data-auto-open="1"を見る）
-  const autoOpen = modal.dataset.autoOpen === '1';
+  if (modal) {
+    // 出品者で自動オープンするかどうか（data-auto-open="1"を見る）
+    const autoOpen = modal.dataset.autoOpen === '1';
 
-  const openModal = () => {
-    modal.classList.add('is-open');
-  };
+    const openModal = () => {
+      modal.classList.add('is-open');
+    };
 
-  const closeModal = () => {
-    modal.classList.remove('is-open');
-  };
+    const closeModal = () => {
+      modal.classList.remove('is-open');
+    };
 
-  // 購入者：ボタンクリックで開く
-  if (openBtn) {
-    openBtn.addEventListener('click', (e) => {
-      e.preventDefault();
-      openModal();
-    });
-  }
+    // 購入者：ボタンクリックで開く
+    if (openBtn) {
+      openBtn.addEventListener('click', (e) => {
+        e.preventDefault();
+        openModal();
+      });
+    }
 
   // 出品者：ページ表示時に自動で開く
   if (autoOpen) {
@@ -316,6 +351,7 @@ document.addEventListener('DOMContentLoaded', function () {
       closeModal();
     });
   }
+}
 });
 </script>
 @endsection

@@ -14,3 +14,5 @@ php artisan migrate:fresh --seed
 exit
 php artisan test
 exit
+php artisan test
+exit
