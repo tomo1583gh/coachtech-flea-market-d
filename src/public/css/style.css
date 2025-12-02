@@ -26,14 +26,12 @@ body {
     margin: 0 auto;
     align-items: center;
     background-color: transparent;
-}
+    padding: 0 20px;
 
-.logo {
-    height: 30px;
 }
 
 .search-form input[type="text"] {
-    width: 230px;
+    width: 225px;
     padding: 6px 12px;
     border-radius: 4px;
     border: none;
@@ -54,7 +52,7 @@ body {
 .btn-sell {
     background: white;
     color: black;
-    padding: 6px 12px;
+    padding: 2px 12px;
     border-radius: 4px;
     margin-left: 10px;
     font-weight: bold;
@@ -67,6 +65,13 @@ body {
 .logo {
     height: 40px;
     cursor: pointer;
+    padding-right: 5px;
+}
+
+@media (min-width: 768px) and (max-width: 850px) {
+    .main-header .search-form input[type="text"] {
+        width: 145px;
+    }
 }
 
 /* プロフィール設定 */
@@ -339,27 +344,20 @@ nav[role="navigation"] {
 }
 /* タブ */
 .mypage-tabs {
-    max-width: 980px;
-    margin: 0 auto 24px;
+    margin: 0 20px 24px;
     display: flex;
     gap: 40px;
     border-bottom: 1px solid #ccc;
 }
 
 .mypage-tab {
+    display: inline-block;
+    padding: 8px 0;
     position: relative;
     padding: 8px;
     font-size: 16px;
-    color: #555;
-    text-decoration: none;
-}
-
-.mypage-tab a {
-    display: inline-block;
-    padding: 8px 0;
     color: #777;
     text-decoration: none;
-    position: relative;
 }
 
 .mypage-tab:hover {
@@ -369,7 +367,6 @@ nav[role="navigation"] {
 .mypage-tab.is-active {
     color: #e60023;;
     border-bottom: 2px solid #e60023;
-    border-bottom: none;
 }
 
 /* タブ横の合計未読件数バッジ */
@@ -1385,7 +1382,7 @@ textarea {
 /* テキストエリア＋ボタン群を横並びにする */
 .chat-input-row {
     display: flex;
-    align-items: flex-start;
+    align-items: flex-end;
     gap: 16px;
 }
 
