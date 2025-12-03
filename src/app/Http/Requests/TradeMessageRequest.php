@@ -44,8 +44,8 @@ class TradeMessageRequest extends FormRequest
             // 本文：401文字以上
             'body.max' => '本文は400文字以内で入力してください',
 
-            // 画像：場増以外
-            'image.image' => '画像ファイルをアップロードしてください',
+            // 画像：画像以外
+            'image.image' => '「.png」または「.jpeg」形式でアップロードしてください',
 
             // 画像：jpeg/png 以外
             'image.mimes' => '「.png」または「.jpeg」形式でアップロードしてください',

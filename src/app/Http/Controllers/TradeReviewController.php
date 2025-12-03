@@ -55,6 +55,23 @@ class TradeReviewController extends Controller
             'rating'      => $validated['rating'],
         ]);
 
+        // 取引完了判定　＋　trade_status 更新
+        // 出品者がレビュー済みか？
+        $sellerReviewed = TradeReview::where('product_id', $product->id)
+            ->where('reviewer_id', $product->user_id)
+            ->exists();
+
+        // 購入者がレビュー済みか？
+        $buyerReviewed = TradeReview::where('product_id', $product->id)
+            ->where('reviewer_id', $product->buyer_id)
+            ->exists();
+
+        // ★ 出品者・購入者の両方がレビュー済み　→　取引完了ステータスに更新
+        if ($sellerReviewed && $buyerReviewed) {
+            $product->trade_status = Product::TRADE_STATUS_COMPLETED;  // ★ ここで completed に
+            $product->save();                                          // ★ DB 更新
+        }
+        
         // ★ 購入者が評価したタイミングで出品者にメール送信
         // 「レビューを書いた人＝購入者」のときだけ送る
         if ($user->id === $product->buyer_id) {

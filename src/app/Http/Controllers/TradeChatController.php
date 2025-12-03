@@ -33,10 +33,13 @@ class TradeChatController extends Controller
             ->update(['is_read' => true]);
 
         // サイドバー用：ログインユーザーが関わっている「取引中の商品一覧」
-        $tradingProducts = Product::query()
-            ->where(function ($query) use ($user) {
-                $query->where('user_id', $user->id)
-                    ->orWhere('buyer_id', $user->id);
+        $tradingProducts = Product::trading()
+            ->where(function ($q) use ($user) {
+                $q->where('buyer_id', $user->id) // 自分が購入した商品
+                    ->orWhere(function ($q2) use ($user) {
+                        $q2->where('user_id', $user->id) // 自分の出品した商品
+                            ->whereNotNull('buyer_id');  // ★ 購入されているもののみ
+                    });
             })
             ->withCount('tradeMessages')
             ->orderBy('updated_at', 'desc')

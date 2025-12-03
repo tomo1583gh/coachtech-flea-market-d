@@ -31,15 +31,22 @@ class MypageController extends Controller
 
         // ?page=xxx （デフォルトは 'sell'）
         $page = $request->query('page', 'sell');
-        
+
         // ------------------------------------------
         // ①取引中商品のベースクエリ（タブ横バッジ用）
         // ------------------------------------------
+        //  - 自分が購入者のもの（buyer_id = 自分）
+        //  - または、自分が出品者ですでに購入されているもの（buyer_idがNOT NULL）
         $tradingBaseQuery = Product::query()
             ->where(function ($q) use ($user) {
-                $q->where('user_id', $user->id)
-                    ->orWhere('buyer_id', $user->id);
+                $q->where('buyer_id', $user->id)                     // ★ 自分が「購入者」の取引
+                    ->orWhere(function ($sub) use ($user) {            // ★ 自分が「出品者」かつ購入者が付いている取引
+                        $sub->where('user_id', $user->id)
+                            ->whereNotNull('buyer_id');
+                    });
             })
+            // 取引中（trading）のステータスだけに絞る
+            ->where('trade_status', Product::TRADE_STATUS_TRADING)
 
             // ★ 未読メッセージ件数をカウントする
             ->withCount([

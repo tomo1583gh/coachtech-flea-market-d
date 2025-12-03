@@ -10,6 +10,10 @@ class Product extends Model
 {
     use HasFactory;
 
+    // 取引ステータスの定数
+    const TRADE_STATUS_TRADING   = 'trading';    // 取引中
+    const TRADE_STATUS_COMPLETED = 'completed';  // 取引完了
+
     protected $fillable = [
         'name',
         'brand',
@@ -23,6 +27,7 @@ class Product extends Model
         'address',
         'building',
         'is_sold',
+        'trade_status',
 
     ];
 
@@ -30,6 +35,16 @@ class Product extends Model
         'is_sold' => 'boolean',
         'state' => 'string',
     ];
+
+    public function scopeTrading($query)
+    {
+        return $query->where('trade_status', self::TRADE_STATUS_TRADING);
+    }
+
+    public function scopeCompleted($query)
+    {
+        return $query->where('trade_status', self::TRADE_STATUS_COMPLETED);
+    }
 
     public function categories()
     {

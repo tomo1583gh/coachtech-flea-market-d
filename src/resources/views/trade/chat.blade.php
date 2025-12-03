@@ -19,25 +19,21 @@
       <aside class="chat-sidebar {{ $isSeller ? 'chat-sidebar--seller' : 'chat-sidebar--buyer' }}">
         <p class="chat-sidebar-heading">その他の取引</p>
 
-        {{-- 出品者のときだけ、取引中の商品リストを表示 --}}
-        @if ($isSeller)
-          @forelse ($tradingProducts as $tradeProduct)
-            <a href="{{ route('trade.chat.show', ['product' => $tradeProduct->id]) }}"
-              class="chat-sidebar-item {{ $tradeProduct->id === $product->id ? 'is-active' : '' }}">
-              <div class="chat-sidebar-thumb">
-                <img src="{{ asset('storage/' . $tradeProduct->image_path) }}"
-                  alt="{{ $tradeProduct->name }}">
-
-              </div>
-              <div class="chat-sidebar-info">
-                <p class="chat-sidebar-name">{{ $tradeProduct->name }}</p>
-              </div>
-            </a>
-          @empty
-              <p class="chat-sidebar-empty">取引中の商品はありません。</p>
-          @endforelse
-        @endif
-      </aside>
+        @forelse ($tradingProducts as $tradeProduct)
+          <a href="{{ route('trade.chat.show', ['product' => $tradeProduct->id]) }}"
+            class="chat-sidebar-item {{ $tradeProduct->id === $product->id ? 'is-active' : '' }}"> 
+          <div class="chat-sidebar-thumb">
+            <img src="{{ asset('storage/' . $tradeProduct->image_path) }}"
+                alt="{{ $tradeProduct->name }}">
+          </div>
+          <div class="chat-sidebar-info">
+            <p class="chat-sidebar-name">{{ $tradeProduct->name }}</p>
+          </div>
+        </a>
+      @empty
+        <p class="chat-sidebar-empty">取引中の商品はありません。</p>
+      @endforelse
+    </aside>
 
       {{-- =================
           右：メインエリア

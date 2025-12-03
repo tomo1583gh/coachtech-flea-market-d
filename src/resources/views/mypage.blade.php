@@ -110,6 +110,18 @@
                                 @endif
                             </div>
 
+                            {{-- 出品 / 購入ラベル --}}
+                            @php
+                                $isSeller = ($product->user_id === Auth::id());
+                                $isBuyer  = ($product->buyer_id === Auth::id());
+                            @endphp
+
+                            @if ($isSeller || $isBuyer)
+                                <div class="trade-role-badge">
+                                    {{ $isSeller ? '出品' : '購入' }}
+                                </div>
+                            @endif
+
                             <div class="product-name">{{ $product->name }}</div>
                             <div class="product-price">￥{{ number_format($product->price) }}</div>
                         </a>
