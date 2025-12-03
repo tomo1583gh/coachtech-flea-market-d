@@ -477,7 +477,7 @@ nav[role="navigation"] {
 /* 商品出品 */
 .sell-container {
     max-width: 600px;
-    margin: 40px auto;
+    margin: 80px auto 40px;
     padding: 0 20px;
 }
 
@@ -701,7 +701,7 @@ textarea {
 .purchase-container {
     display: flex;
     justify-content: space-between;
-    margin: 40px auto;
+    margin: 80px auto 40px;
     max-width: 900px;
     gap: 40px;
 }
