@@ -162,6 +162,15 @@ body {
     color: #333;
 }
 
+/* ★ タブレット幅 768〜850px では 2列表示 */
+@media (min-width: 768px) and (max-width: 850px) {
+    .product-list {
+        grid-template-columns: repeat(2, 1fr);
+        max-width: 600px;
+        /* お好みで。なくてもOK */
+    }
+}
+
 /* ページネーション部分 */
 .pagination-wrapper {
     display: flex;
@@ -220,7 +229,7 @@ nav[role="navigation"] {
     background-color: #fff;
     text-decoration: none;
     color: inherit;
-    width: 260px;
+    width: 100%;
 }
 
 .sold-label {
